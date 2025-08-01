@@ -1,7 +1,7 @@
 import { Phone, MessageCircle, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const ContactStrip = () => {
+const ContactStrip = ({ id }: { id?: string }) => {
   const contactMethods = [
     {
       icon: Phone,
@@ -34,7 +34,7 @@ const ContactStrip = () => {
   ];
 
   return (
-    <section className="py-16 bg-secondary/20 border-t border-border">
+    <section id={id} className="py-16 bg-secondary/20 border-t border-border">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h3 className="text-3xl font-bold text-white mb-4">Get In Touch</h3>

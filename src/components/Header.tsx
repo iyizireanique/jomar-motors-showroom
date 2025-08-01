@@ -8,15 +8,12 @@ const Header = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Used Cars", href: "/cars" },
-    { name: "Rentals", href: "/cars?filter=rent" },
-    { name: "Consultancy", href: "/consultancy" },
-    { name: "Trade-In", href: "/trade-in" },
-    { name: "Contact", href: "/contact" },
+    { name: "Cars", href: "/cars" },
+    { name: "Contact", href: "#contact" },
   ];
 
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50">
+    <header className="bg-background border-b border-border sticky top-0 z-50 animated-header">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -56,9 +53,6 @@ const Header = () => {
                 <MessageCircle className="w-4 h-4" />
                 WhatsApp
               </a>
-            </Button>
-            <Button variant="premium" size="sm" asChild>
-              <Link to="/admin">Admin Login</Link>
             </Button>
           </div>
 
@@ -101,9 +95,6 @@ const Header = () => {
                     <MessageCircle className="w-4 h-4" />
                     WhatsApp
                   </a>
-                </Button>
-                <Button variant="premium" size="sm" className="w-full" asChild>
-                  <Link to="/admin">Admin Login</Link>
                 </Button>
               </div>
             </nav>

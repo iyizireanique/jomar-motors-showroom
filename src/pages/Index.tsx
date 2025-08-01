@@ -10,7 +10,7 @@ const Index = () => {
       <Header />
       <HeroSection />
       <ServicesSection />
-      <ContactStrip />
+      <ContactStrip id="contact" />
       <Footer />
     </div>
   );
