@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, MessageCircle } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Menu, X, Phone, MessageCircle, ChevronDown } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Cars", href: "/cars" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -22,8 +22,8 @@ const Header = () => {
               <span className="text-black font-bold text-xl">JM</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-primary">JOMAR MOTORS</h1>
-              <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA ZAKOZE RYIZEWE</p>
+              <h1 className="text-xl font-bold text-primary">JOMAR MOTORS RWANDA</h1>
+              <p className="text-xs text-muted-foreground">Partners in Growth, Champions for Clients</p>
             </div>
           </Link>
 
@@ -38,6 +38,24 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Cars Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 text-foreground hover:text-primary transition-colors duration-300">
+                Cars <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link to="/cars?filter=sale">Buy Cars</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/cars?filter=rent">Rental Cars</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/cars">All Cars</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           {/* Contact Actions */}
@@ -83,6 +101,23 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Cars Menu */}
+              <div className="px-4 py-2">
+                <p className="text-sm font-medium text-foreground mb-2">Cars</p>
+                <div className="space-y-1 ml-4">
+                  <Link to="/cars?filter=sale" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    Buy Cars
+                  </Link>
+                  <Link to="/cars?filter=rent" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    Rental Cars
+                  </Link>
+                  <Link to="/cars" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    All Cars
+                  </Link>
+                </div>
+              </div>
+              
               <div className="px-4 py-2 space-y-2">
                 <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
                   <a href="tel:+250788239593" className="flex items-center gap-2">
