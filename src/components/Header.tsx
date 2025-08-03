@@ -18,12 +18,14 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-gold rounded-lg flex items-center justify-center">
-              <span className="text-black font-bold text-xl">JM</span>
-            </div>
+            <img 
+              src="/lovable-uploads/567dfb02-fdd7-4e63-b937-138d23b1c3f6.png" 
+              alt="Jomar Motors Rwanda Logo" 
+              className="w-12 h-12 object-contain"
+            />
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold text-primary">JOMAR MOTORS RWANDA</h1>
-              <p className="text-xs text-muted-foreground">Partners in Growth, Champions for Clients</p>
+              <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA ZAKOZE RYIZEWE</p>
             </div>
           </Link>
 

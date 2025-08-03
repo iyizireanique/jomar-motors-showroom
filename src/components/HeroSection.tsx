@@ -1,18 +1,39 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Car, Shield, Award } from "lucide-react";
-import heroCarImage from "@/assets/hero-car-rwanda.jpg";
+import { useState, useEffect } from "react";
+import carBg1 from "@/assets/car-bg-1.jpg";
+import carBg2 from "@/assets/car-bg-2.jpg";
+import carBg3 from "@/assets/car-bg-3.jpg";
 
 const HeroSection = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const backgroundImages = [carBg1, carBg2, carBg3];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
+      {/* Auto-changing Background Images with Overlay */}
       <div className="absolute inset-0">
-        <img
-          src={heroCarImage}
-          alt="Premium luxury vehicle"
-          className="w-full h-full object-cover"
-        />
+        {backgroundImages.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`Premium luxury vehicle ${index + 1}`}
+            className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
       </div>
 
