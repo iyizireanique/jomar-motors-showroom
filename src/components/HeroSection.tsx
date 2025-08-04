@@ -42,7 +42,7 @@ const HeroSection = () => {
             transition={{ duration: 1, ease: "easeOut" }}
           />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50"></div>
       </div>
 
       {/* Engine Sound Video */}
@@ -68,9 +68,16 @@ const HeroSection = () => {
                 animate={{ x: '0%', opacity: 1 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
               >
-                Car Dealership in Rwanda &
                 <motion.span 
                   className="block text-transparent bg-gradient-gold bg-clip-text"
+                  initial={{ x: '-100%', opacity: 0 }}
+                  animate={{ x: '0%', opacity: 1 }}
+                  transition={{ duration: 1.4, delay: 0.1, ease: "easeOut" }}
+                >
+                  JOMAR MOTORS RWANDA
+                </motion.span>
+                <motion.span
+                  className="block text-white mt-2"
                   initial={{ x: '-100%', opacity: 0 }}
                   animate={{ x: '0%', opacity: 1 }}
                   transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
@@ -87,9 +94,9 @@ const HeroSection = () => {
               animate={{ x: '0%', opacity: 1 }}
               transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
             >
-              Discover premium vehicles and professional automotive services in Rwanda. 
-              From quality used cars to flexible rental solutions, we're your trusted partner 
-              for all automotive needs.
+              Your premier automotive destination in Rwanda. From premium used cars to 
+              professional buying consultancy, we provide comprehensive automotive solutions 
+              with trusted expertise and quality guarantee.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -110,6 +117,13 @@ const HeroSection = () => {
                 <Link to="/cars?filter=rent" className="flex items-center gap-2">
                   <Shield className="w-5 h-5" />
                   Rent a Car
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="xl" asChild className="group border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                <Link to="/buying-guide" className="flex items-center gap-2">
+                  <Award className="w-5 h-5" />
+                  Learn More About Used Car Buying
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>

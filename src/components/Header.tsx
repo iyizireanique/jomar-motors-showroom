@@ -59,13 +59,15 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/cars">All Cars</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/buying-guide">Buying Consultancy</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </nav>
 
           {/* Contact Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <AboutModal />
             <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
               <a href="tel:+250788239593" className="flex items-center gap-2">
@@ -121,6 +123,9 @@ const Header = () => {
                   </Link>
                   <Link to="/cars" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                     All Cars
+                  </Link>
+                  <Link to="/buying-guide" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    Buying Consultancy
                   </Link>
                 </div>
               </div>

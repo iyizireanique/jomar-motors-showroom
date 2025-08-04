@@ -24,21 +24,21 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <Collapsible open={aboutOpen} onOpenChange={setAboutOpen}>
             <CollapsibleTrigger className="flex items-center justify-between w-full p-6 bg-card border border-border rounded-lg hover:bg-muted/50 transition-colors">
-              <h2 className="text-2xl font-bold text-white">About Jomar Motors Rwanda</h2>
+              <h2 className="text-2xl font-bold text-foreground">About Jomar Motors Rwanda</h2>
               <ChevronDown className={`w-6 h-6 text-primary transition-transform ${aboutOpen ? 'rotate-180' : ''}`} />
             </CollapsibleTrigger>
             <CollapsibleContent>
               <Card className="mt-4 bg-card border-border">
                 <CardContent className="p-6">
-                  <div className="space-y-4 text-gray-300">
-                    <h3 className="text-xl font-semibold text-white">Our Journey</h3>
+                  <div className="space-y-4 text-muted-foreground">
+                    <h3 className="text-xl font-semibold text-foreground">Our Journey</h3>
                     <p>
                       Established in 2019, Jomar Motors has grown to become Rwanda's trusted automotive partner. 
                       We specialize in providing quality pre-owned vehicles and comprehensive automotive solutions 
                       to individuals and businesses across the country.
                     </p>
                     
-                    <h3 className="text-xl font-semibold text-white">Our Vision & Mission</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Our Vision & Mission</h3>
                     <p>
                       <strong className="text-primary">Vision:</strong> To be the leading automotive service provider in Rwanda, 
                       known for quality, reliability, and exceptional customer service.
@@ -49,7 +49,7 @@ const Index = () => {
                       and consultancy services.
                     </p>
                     
-                    <h3 className="text-xl font-semibold text-white">Why Choose Us?</h3>
+                    <h3 className="text-xl font-semibold text-foreground">Why Choose Us?</h3>
                     <ul className="list-disc list-inside space-y-2">
                       <li>Quality guaranteed vehicles with thorough inspections</li>
                       <li>Flexible rental options for short and long-term needs</li>
