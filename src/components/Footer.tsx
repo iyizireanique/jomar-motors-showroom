@@ -13,7 +13,7 @@ const Footer = () => {
                 <span className="text-black font-bold">JM</span>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-primary">JOMAR MOTORS</h3>
+                <h3 className="text-lg font-bold text-primary">JOMAR MOTORS RWANDA</h3>
                 <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA ZAKOZE RYIZEWE</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2024 JOMAR MOTORS. All rights reserved. | Established 2019 | Part of JOMAR BUSINESS GROUP
+            © 2025 JOMAR MOTORS RWANDA. All rights reserved. | Established 2019 | Part of JOMAR BUSINESS GROUP
           </p>
         </div>
       </div>

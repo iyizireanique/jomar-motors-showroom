@@ -30,7 +30,7 @@ const FeaturedCars = () => {
         year: 2020,
         mileage: "45,000 km",
         status: "sale",
-        images: ["/placeholder.svg"],
+        images: ["/src/assets/hondarv4.jpg"],
         description: "Well-maintained Toyota RAV4 with excellent fuel efficiency and reliability.",
       },
       {
@@ -40,7 +40,7 @@ const FeaturedCars = () => {
         year: 2019,
         mileage: "38,000 km",
         status: "rent",
-        images: ["/placeholder.svg"],
+        images: ["/src/assets/toyotarav4.jpg"],
         description: "Spacious Honda CR-V perfect for family trips and business use.",
       },
       {
@@ -50,7 +50,7 @@ const FeaturedCars = () => {
         year: 2021,
         mileage: "25,000 km",
         status: "sale",
-        images: ["/placeholder.svg"],
+        images: ["/src/assets/maadison.jpg"],
         description: "Premium Mazda CX-5 with advanced safety features and luxury interior.",
       },
       {
@@ -75,10 +75,11 @@ const FeaturedCars = () => {
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">Featured Cars</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4">USED CARS FOR SALE</h2>
+          <h4 className="text-2xl font-bold text-primary mb-4">HOT DEALS</h4>
+
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover our selection of quality vehicles available for sale and rent in Rwanda
-          </p>
+          Certified& Inspected Cars<span className="text-primary"> "Imodoka zigenzuwe &zifite ibyangombwa"</span>       </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -41,7 +41,7 @@ const CarDetails = () => {
       fuelType: "Petrol",
       engine: "2.5L",
       status: "sale",
-      images: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg"],
+      images: ["/src/assets/toyotacarimiry.jpg", "/src/assets/toyotacarmy.jpg", "/src/assets/toyotacarmy.jpg"],
       description: "This well-maintained Toyota Camry is in excellent condition and perfect for both city driving and long trips. The vehicle has been regularly serviced and comes with a complete maintenance history.",
       price: "$25,000",
       features: [

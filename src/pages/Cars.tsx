@@ -41,9 +41,8 @@ const Cars = () => {
         fuelType: "Petrol",
         engine: "2.5L",
         status: "sale",
-        images: ["/placeholder.svg"],
+        images: ["/src/assets/toyotacarimiry.jpg"],
         description: "Well-maintained Toyota Camry in excellent condition",
-        price: "$25,000"
       },
       {
         id: "2",
@@ -70,7 +69,6 @@ const Cars = () => {
         status: "sale",
         images: ["/placeholder.svg"],
         description: "Luxury SUV with premium features",
-        price: "$45,000"
       }
     ];
     setCars(demoCars);

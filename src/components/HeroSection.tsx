@@ -44,14 +44,14 @@ const HeroSection = () => {
             {/* Main Heading */}
             <div className="space-y-4">
               <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-                Quality Cars &
+                Car Dealeship in Rwanda &
                 <span className="block text-transparent bg-gradient-gold bg-clip-text">
-                  Automotive Solutions
+                Gura,Gurisha,Kodesha Imodoka
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-primary font-semibold tracking-wide">
+              {/* <p className="text-xl md:text-2xl text-primary font-semibold tracking-wide">
                 Partners in Growth, Champions for Clients
-              </p>
+              </p> */}
             </div>
 
             {/* Description */}
