@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase, type Car as CarType } from "@/lib/supabase";
 
 interface Car {
   id: string;
@@ -19,53 +20,77 @@ interface Car {
 const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Demo data - replace with actual data fetching
+  // Fallback demo data
+  const fallbackCars: Car[] = [
+    {
+      id: "1",
+      make: "Toyota",
+      model: "RAV4",
+      year: 2020,
+      mileage: "45,000 km",
+      status: "sale",
+      images: ["/src/assets/hondarv4.jpg"],
+      description: "Well-maintained Toyota RAV4 with excellent fuel efficiency and reliability.",
+    },
+    {
+      id: "2", 
+      make: "Honda",
+      model: "CR-V",
+      year: 2019,
+      mileage: "38,000 km",
+      status: "rent",
+      images: ["/src/assets/toyotarav4.jpg"],
+      description: "Spacious Honda CR-V perfect for family trips and business use.",
+    },
+    {
+      id: "3",
+      make: "Mazda",
+      model: "CX-5", 
+      year: 2021,
+      mileage: "25,000 km",
+      status: "sale",
+      images: ["/src/assets/maadison.jpg"],
+      description: "Premium Mazda CX-5 with advanced safety features and luxury interior.",
+    },
+    {
+      id: "4",
+      make: "Nissan",
+      model: "X-Trail",
+      year: 2018,
+      mileage: "52,000 km", 
+      status: "rent",
+      images: ["/placeholder.svg"],
+      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
+    },
+  ];
+
   useEffect(() => {
-    const demoCarData: Car[] = [
-      {
-        id: "1",
-        make: "Toyota",
-        model: "RAV4",
-        year: 2020,
-        mileage: "45,000 km",
-        status: "sale",
-        images: ["/src/assets/hondarv4.jpg"],
-        description: "Well-maintained Toyota RAV4 with excellent fuel efficiency and reliability.",
-      },
-      {
-        id: "2", 
-        make: "Honda",
-        model: "CR-V",
-        year: 2019,
-        mileage: "38,000 km",
-        status: "rent",
-        images: ["/src/assets/toyotarav4.jpg"],
-        description: "Spacious Honda CR-V perfect for family trips and business use.",
-      },
-      {
-        id: "3",
-        make: "Mazda",
-        model: "CX-5", 
-        year: 2021,
-        mileage: "25,000 km",
-        status: "sale",
-        images: ["/src/assets/maadison.jpg"],
-        description: "Premium Mazda CX-5 with advanced safety features and luxury interior.",
-      },
-      {
-        id: "4",
-        make: "Nissan",
-        model: "X-Trail",
-        year: 2018,
-        mileage: "52,000 km", 
-        status: "rent",
-        images: ["/placeholder.svg"],
-        description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
-      },
-    ];
-    setCars(demoCarData);
+    fetchCars();
   }, []);
+
+  const fetchCars = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      if (error) {
+        console.error('Error fetching cars:', error);
+        setCars(fallbackCars);
+      } else {
+        setCars(data || fallbackCars);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setCars(fallbackCars);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCarClick = (car: Car) => {
     setSelectedCar(car);

@@ -2,13 +2,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Menu, X, Phone, MessageCircle, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, MessageCircle, ChevronDown, Info } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { AboutModal } from "@/components/AboutModal";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
     { name: "Home", href: "/" },
+    { name: "About Us", href: "#about" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -62,6 +65,8 @@ const Header = () => {
 
           {/* Contact Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            <AboutModal />
+            <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
               <a href="tel:+250788239593" className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />

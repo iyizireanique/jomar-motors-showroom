@@ -2,13 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Car, Shield, Award } from "lucide-react";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import carBg1 from "@/assets/car-bg-1.jpg";
 import carBg2 from "@/assets/car-bg-2.jpg";
 import carBg3 from "@/assets/car-bg-3.jpg";
+import carBgClear from "@/assets/car-bg-clear.jpg";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const backgroundImages = [carBg1, carBg2, carBg3];
+  const backgroundImages = [carBgClear, carBg1, carBg2, carBg3];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,17 +27,34 @@ const HeroSection = () => {
       {/* Auto-changing Background Images with Overlay */}
       <div className="absolute inset-0">
         {backgroundImages.map((image, index) => (
-          <img
+          <motion.img
             key={index}
             src={image}
             alt={`Premium luxury vehicle ${index + 1}`}
             className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
               index === currentImageIndex ? 'opacity-100' : 'opacity-0'
             }`}
+            initial={{ x: '-100%' }}
+            animate={{ 
+              x: index === currentImageIndex ? '0%' : '-100%',
+              opacity: index === currentImageIndex ? 1 : 0
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
           />
         ))}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
       </div>
+
+      {/* Engine Sound Video */}
+      <video 
+        autoPlay 
+        muted 
+        loop 
+        className="absolute inset-0 w-full h-full object-cover opacity-20 z-0"
+        poster={carBg3}
+      >
+        <source src="/engine-sound.mp4" type="video/mp4" />
+      </video>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
@@ -43,26 +62,43 @@ const HeroSection = () => {
           <div className="space-y-6">
             {/* Main Heading */}
             <div className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-                Car Dealeship in Rwanda &
-                <span className="block text-transparent bg-gradient-gold bg-clip-text">
-                Gura,Gurisha,Kodesha Imodoka
-                </span>
-              </h1>
-              {/* <p className="text-xl md:text-2xl text-primary font-semibold tracking-wide">
-                Partners in Growth, Champions for Clients
-              </p> */}
+              <motion.h1 
+                className="text-5xl md:text-7xl font-bold text-white leading-tight"
+                initial={{ x: '-100%', opacity: 0 }}
+                animate={{ x: '0%', opacity: 1 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              >
+                Car Dealership in Rwanda &
+                <motion.span 
+                  className="block text-transparent bg-gradient-gold bg-clip-text"
+                  initial={{ x: '-100%', opacity: 0 }}
+                  animate={{ x: '0%', opacity: 1 }}
+                  transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
+                >
+                  Gura, Gurisha, Kodesha Imodoka
+                </motion.span>
+              </motion.h1>
             </div>
 
             {/* Description */}
-            <p className="text-lg text-gray-300 max-w-2xl leading-relaxed">
+            <motion.p 
+              className="text-lg text-gray-300 max-w-2xl leading-relaxed"
+              initial={{ x: '-50%', opacity: 0 }}
+              animate={{ x: '0%', opacity: 1 }}
+              transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+            >
               Discover premium vehicles and professional automotive services in Rwanda. 
               From quality used cars to flexible rental solutions, we're your trusted partner 
               for all automotive needs.
-            </p>
+            </motion.p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 pt-4"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
+            >
               <Button variant="premium" size="xl" asChild className="group">
                 <Link to="/cars" className="flex items-center gap-2">
                   <Car className="w-5 h-5" />
@@ -77,7 +113,7 @@ const HeroSection = () => {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-            </div>
+            </motion.div>
 
             {/* Trust Indicators */}
             <div className="flex flex-wrap items-center gap-8 pt-8">
