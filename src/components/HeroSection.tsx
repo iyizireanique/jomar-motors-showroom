@@ -5,12 +5,11 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import carBg1 from "@/assets/car-bg-1.jpg";
 import carBg2 from "@/assets/car-bg-2.jpg";
-import carBg3 from "@/assets/car-bg-3.jpg";
 import carBgClear from "@/assets/car-bg-clear.jpg";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const backgroundImages = [carBgClear, carBg1, carBg2, carBg3];
+  const backgroundImages = [carBgClear,carBg1,carBg2];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,15 +45,15 @@ const HeroSection = () => {
       </div>
 
       {/* Engine Sound Video */}
-      <video 
+      {/* <video 
         autoPlay 
         muted 
         loop 
         className="absolute inset-0 w-full h-full object-cover opacity-20 z-0"
-        poster={carBg3}
+        poster={carBgClear}
       >
         <source src="/engine-sound.mp4" type="video/mp4" />
-      </video>
+      </video> */}
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
