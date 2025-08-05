@@ -3,13 +3,23 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Car, Shield, Award } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import carBg1 from "@/assets/car-bg-1.jpg";
-import carBg2 from "@/assets/car-bg-2.jpg";
-import carBgClear from "@/assets/car-bg-clear.jpg";
+import carKcc from "@/assets/car-kcc-1.jpg";
+import carArena from "@/assets/car-arena-1.jpg";
+import carKimisagara from "@/assets/car-kimisagara-1.jpg";
+import carNyabugogo from "@/assets/car-nyabugogo-1.jpg";
+import carCityTower from "@/assets/car-city-tower-1.jpg";
+import carUr from "@/assets/car-ur-1.jpg";
+import carRebero from "@/assets/car-rebero-1.jpg";
+import carGatsata from "@/assets/car-gatsata-1.jpg";
+import carKacyiru from "@/assets/car-kacyiru-1.jpg";
+import carGisozi from "@/assets/car-gisozi-1.jpg";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const backgroundImages = [carBgClear,carBg1,carBg2];
+  const backgroundImages = [
+    carKcc, carArena, carKimisagara, carNyabugogo, carCityTower,
+    carUr, carRebero, carGatsata, carKacyiru, carGisozi
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,15 +54,14 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50"></div>
       </div>
 
-      {/* Engine Sound Video */}
+      {/* Engine Sound Video - Add your engine video without sound */}
       {/* <video 
         autoPlay 
         muted 
         loop 
-        className="absolute inset-0 w-full h-full object-cover opacity-20 z-0"
-        poster={carBgClear}
+        className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
       >
-        <source src="/engine-sound.mp4" type="video/mp4" />
+        <source src="/engine-video.mp4" type="video/mp4" />
       </video> */}
 
       {/* Content */}
