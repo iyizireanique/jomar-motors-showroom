@@ -64,6 +64,26 @@ const FeaturedCars = () => {
       images: ["/placeholder.svg"],
       description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
     },
+    {
+      id: "5",
+      make: "Nissan",
+      model: "X-Trail",
+      year: 2018,
+      mileage: "52,000 km", 
+      status: "rent",
+      images: ["/placeholder.svg"],
+      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
+    },
+    {
+      id: "6",
+      make: "Nissan",
+      model: "X-Trail",
+      year: 2018,
+      mileage: "52,000 km", 
+      status: "rent",
+      images: ["/placeholder.svg"],
+      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
+    },
   ];
 
   useEffect(() => {

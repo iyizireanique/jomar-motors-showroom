@@ -97,6 +97,7 @@ const CategorizedCars = () => {
           className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
         />
       </div>
+      
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg text-foreground mb-1">
           {car.brand} {car.model}
@@ -179,25 +180,26 @@ const CategorizedCars = () => {
       <div className="container mx-auto px-4">
         
         {/* Hot Deals Section */}
+        
         <CategorySection 
           title="HOT DEALS"
-          description="Special offers and featured vehicles at unbeatable prices"
+          description="Imodoka zigenzuwe & zifite ibyangombwa - Professionally inspected and certified vehicles"
           cars={hotDeals}
         />
 
         {/* Certified & Inspected Cars */}
-        <CategorySection 
+        {/* <CategorySection 
           title="Certified & Inspected Cars"
           description="Imodoka zigenzuwe & zifite ibyangombwa - Professionally inspected and certified vehicles"
           cars={certifiedCars}
-        />
+        /> */}
 
         {/* Used Cars for Sale */}
-        <CategorySection 
+        {/* <CategorySection 
           title="USED CARS FOR SALE"
           description="Quality pre-owned vehicles ready for new owners"
           cars={usedCarsForSale}
-        />
+        /> */}
 
         <div className="text-center mt-12">
           <Button variant="outline" size="lg" asChild>
@@ -222,6 +224,7 @@ const CategorizedCars = () => {
                     alt={selectedCar.title}
                     className="w-full h-full object-cover"
                   />
+                  
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
