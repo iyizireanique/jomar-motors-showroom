@@ -1,0 +1,22 @@
+-- Add more sample cars with different categories
+INSERT INTO cars (title, brand, model, year, price, currency, type, fuel_type, transmission, seats, mileage, location, description, features, image_url, contact_email, contact_phone, contact_whatsapp, featured, available) VALUES
+-- Hot Deals Cars
+('Toyota Camry 2020 - Hot Deal!', 'Toyota', 'Camry', 2020, 22000000.00, 'RWF', 'sale', 'Petrol', 'Automatic', 5, 35000, 'Kigali', 'Excellent condition sedan with low mileage. Perfect for business and family use. Certified and inspected!', '["Air Conditioning", "Cruise Control", "Bluetooth", "USB Ports", "Electric Windows"]', 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', true, true),
+
+('Nissan X-Trail 2019 - Special Price', 'Nissan', 'X-Trail', 2019, 26000000.00, 'RWF', 'sale', 'Petrol', 'Automatic', 7, 40000, 'Kigali', 'Family SUV with 7 seats. Certified pre-owned with full inspection report. Ready to drive!', '["7 Seater", "4WD", "Roof Rails", "Rear Camera", "DVD Player"]', 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', true, true),
+
+-- Certified & Inspected Cars
+('BMW X3 2021 - Certified', 'BMW', 'X3', 2021, 42000000.00, 'RWF', 'sale', 'Petrol', 'Automatic', 5, 18000, 'Kigali', 'Luxury SUV with premium features. Certified by BMW dealership with extended warranty. Fully inspected and guaranteed.', '["Premium Audio", "Panoramic Sunroof", "Navigation", "Heated Seats", "Park Assist"]', 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', false, true),
+
+('Audi Q5 2020 - Inspected', 'Audi', 'Q5', 2020, 38000000.00, 'RWF', 'sale', 'Petrol', 'Automatic', 5, 22000, 'Kigali', 'Elegant SUV with advanced safety features. Certified pre-owned with comprehensive inspection. All documents verified.', '["Virtual Cockpit", "LED Headlights", "Quattro AWD", "Memory Seats", "Wireless Charging"]', 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', false, true),
+
+-- More rental cars
+('Toyota Fortuner 2023 - Rental', 'Toyota', 'Fortuner', 2023, 200000.00, 'RWF', 'rent', 'Diesel', 'Automatic', 7, 5000, 'Kigali', 'New SUV perfect for safari trips and family outings. Daily and weekly rental rates available.', '["4x4 Capability", "7 Seater", "High Ground Clearance", "Towing Capacity", "Hill Assist"]', 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'rentals@jomarmotors.rw', '+250788123456', '+250788123456', true, true),
+
+-- More budget-friendly options
+('Suzuki Swift 2018 - Budget Friendly', 'Suzuki', 'Swift', 2018, 12000000.00, 'RWF', 'sale', 'Petrol', 'Manual', 5, 60000, 'Kigali', 'Economical hatchback perfect for city driving. Low maintenance cost and excellent fuel economy. Inspected and ready!', '["Fuel Efficient", "Compact Size", "Easy Parking", "Low Maintenance", "Reliable Engine"]', 'https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', false, true),
+
+('Hyundai Elantra 2019 - Great Value', 'Hyundai', 'Elantra', 2019, 18000000.00, 'RWF', 'sale', 'Petrol', 'Automatic', 5, 45000, 'Kigali', 'Stylish sedan with modern features. Certified pre-owned with service history. Perfect for young professionals.', '["Touchscreen Display", "Rear Camera", "Cruise Control", "Smart Key", "Electronic Stability"]', 'https://images.unsplash.com/photo-1493238792000-8113da705763?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'sales@jomarmotors.rw', '+250788123456', '+250788123456', false, true),
+
+-- Commercial vehicles
+('Isuzu D-Max 2022 - Commercial', 'Isuzu', 'D-Max', 2022, 32000000.00, 'RWF', 'sale', 'Diesel', 'Manual', 5, 15000, 'Kigali', 'Robust pickup truck perfect for construction and farming. Certified for commercial use with full inspection.', '["4WD", "Heavy Duty", "Cargo Space", "Towing Hook", "Durable Build"]', 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80', 'commercial@jomarmotors.rw', '+250788123456', '+250788123456', false, true);
