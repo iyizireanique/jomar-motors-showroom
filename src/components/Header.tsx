@@ -11,7 +11,6 @@ const Header = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "About Us", href: "#about" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -43,6 +42,8 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+            {/* About Us Modal */}
+            <AboutModal />
             
             {/* Cars Dropdown */}
             <DropdownMenu>
@@ -128,6 +129,11 @@ const Header = () => {
                     Buying Consultancy
                   </Link>
                 </div>
+              </div>
+              
+              {/* About Us Modal for Mobile */}
+              <div className="px-4 py-2">
+                <AboutModal />
               </div>
               
               <div className="px-4 py-2 space-y-2">

@@ -1,6 +1,6 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Info, Award, Shield, Car, Users, Target, Phone, MessageCircle } from "lucide-react";
+import { Info } from "lucide-react";
 
 export function AboutModal() {
   return (
@@ -16,6 +16,9 @@ export function AboutModal() {
           <DialogTitle className="text-2xl font-bold text-center text-primary">
             About Jomar Motors Rwanda
           </DialogTitle>
+          <DialogDescription className="text-center text-muted-foreground">
+            Learn more about our company and services
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-6 p-6">
