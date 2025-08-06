@@ -188,18 +188,18 @@ const CategorizedCars = () => {
         />
 
         {/* Certified & Inspected Cars */}
-        {/* <CategorySection 
-          title="Certified & Inspected Cars"
-          description="Imodoka zigenzuwe & zifite ibyangombwa - Professionally inspected and certified vehicles"
+        <CategorySection 
+          title="Certified& Inspected Cars"
+          description="Imodoka zigenzuwe &zifite ibyangombwa"
           cars={certifiedCars}
-        /> */}
+        />
 
         {/* Used Cars for Sale */}
-        {/* <CategorySection 
+        <CategorySection 
           title="USED CARS FOR SALE"
           description="Quality pre-owned vehicles ready for new owners"
           cars={usedCarsForSale}
-        /> */}
+        />
 
         <div className="text-center mt-12">
           <Button variant="outline" size="lg" asChild>
