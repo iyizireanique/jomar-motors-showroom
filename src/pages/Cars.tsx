@@ -54,7 +54,7 @@ const Cars = () => {
         fuelType: "Petrol",
         engine: "1.5L Turbo",
         status: "rent",
-        images: ["/placeholder.svg"],
+        images: ["/src/assets/prii1.jpeg"],
         description: "Spacious and reliable SUV perfect for family trips"
       },
       {

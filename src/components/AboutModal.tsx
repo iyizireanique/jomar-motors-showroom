@@ -1,6 +1,6 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
+import { Info, Award, Shield, Car, Users, Target, Phone, MessageCircle } from "lucide-react";
 
 export function AboutModal() {
   return (
@@ -16,50 +16,124 @@ export function AboutModal() {
           <DialogTitle className="text-2xl font-bold text-center text-primary">
             About Jomar Motors Rwanda
           </DialogTitle>
-          <DialogDescription className="text-center text-muted-foreground">
-            Learn more about our company and services
-          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-6 p-6">
+          {/* Company Overview */}
           <div className="text-center space-y-4">
-            <p className="text-muted-foreground">
-              Information coming soon...
+            <div className="flex justify-center">
+              <div className="w-16 h-16 bg-gradient-gold rounded-full flex items-center justify-center">
+                <Car className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <h3 className="text-xl font-semibold">Your Trusted Automotive Partner Since 2019</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Jomar Motors Rwanda has established itself as the premier destination for quality vehicles 
+              and professional automotive services across Rwanda. We bridge the gap between customers 
+              and their perfect vehicle.
             </p>
           </div>
-          
-          {/* Location Section */}
-          <div className="bg-muted/50 p-6 rounded-lg text-center space-y-3">
-            <h4 className="text-lg font-semibold flex items-center justify-center gap-2">
-              <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Find Jomar Motors
+
+          {/* Mission & Vision */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-primary" />
+                <h4 className="text-lg font-semibold">Our Mission</h4>
+              </div>
+              <p className="text-muted-foreground">
+                To provide exceptional automotive solutions by connecting Rwandans with quality, 
+                reliable vehicles while delivering outstanding customer service and building 
+                lasting relationships.
+              </p>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-primary" />
+                <h4 className="text-lg font-semibold">Our Vision</h4>
+              </div>
+              <p className="text-muted-foreground">
+                To be Rwanda's leading automotive service provider, recognized for quality, 
+                innovation, and unwavering commitment to customer satisfaction in every transaction.
+              </p>
+            </div>
+          </div>
+
+          {/* Services */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
+              Our Services
             </h4>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 border border-border rounded-lg">
+                <h5 className="font-medium text-primary mb-2">Vehicle Sales</h5>
+                <p className="text-sm text-muted-foreground">
+                  Quality pre-owned vehicles thoroughly inspected and certified for reliability.
+                </p>
+              </div>
+              <div className="p-4 border border-border rounded-lg">
+                <h5 className="font-medium text-primary mb-2">Car Rentals</h5>
+                <p className="text-sm text-muted-foreground">
+                  Flexible short and long-term rental solutions for personal and business needs.
+                </p>
+              </div>
+              <div className="p-4 border border-border rounded-lg">
+                <h5 className="font-medium text-primary mb-2">Buying Consultancy</h5>
+                <p className="text-sm text-muted-foreground">
+                  Expert guidance to help you make informed vehicle purchase decisions.
+                </p>
+              </div>
+              <div className="p-4 border border-border rounded-lg">
+                <h5 className="font-medium text-primary mb-2">Trade-In Services</h5>
+                <p className="text-sm text-muted-foreground">
+                  Fair market value assessments and trade-in opportunities for your current vehicle.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Why Choose Us */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              Why Choose Jomar Motors?
+            </h4>
+            <div className="grid md:grid-cols-3 gap-3">
+              {[
+                "Quality Guaranteed Vehicles",
+                "Transparent Pricing",
+                "Expert Team Support",
+                "Flexible Payment Options",
+                "After-Sales Support",
+                "Trusted Partnership Network"
+              ].map((item, index) => (
+                <div key={index} className="flex items-center gap-2 p-2">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="text-sm">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="bg-muted/50 p-6 rounded-lg text-center space-y-3">
+            <h4 className="text-lg font-semibold">Get in Touch</h4>
             <p className="text-muted-foreground">
-              Visit our showroom in Kigali for the best deals on quality vehicles
+              Ready to find your perfect vehicle? Contact us today!
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="outline" asChild>
-                <a 
-                  href="https://maps.google.com/?q=Jomar+Motors+Kigali+Rwanda" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  </svg>
-                  View on Google Maps
+                <a href="tel:+250788239593" className="flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  +250 788 239 593
                 </a>
               </Button>
               <Button variant="outline" asChild>
-                <a href="tel:+250788239593" className="flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  Call Us
+                <a href="https://wa.me/250788239593" className="flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
                 </a>
               </Button>
             </div>
