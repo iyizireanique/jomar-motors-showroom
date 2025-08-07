@@ -34,7 +34,7 @@ interface Car {
 
 const CategorizedCars = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);ß
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
