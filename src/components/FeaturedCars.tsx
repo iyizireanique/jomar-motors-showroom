@@ -8,83 +8,33 @@ import { supabase, type Car as CarType } from "@/lib/supabase";
 
 interface Car {
   id: string;
-  make: string;
+  title: string;
+  brand: string;
   model: string;
   year: number;
-  mileage: string;
-  status: "sale" | "rent";
-  images: string[];
-  description: string;
+  price: number;
+  currency: string;
+  type: string;
+  fuel_type: string;
+  transmission: string;
+  seats: number;
+  mileage?: number;
+  location: string;
+  description?: string;
+  features?: string[];
+  image_url?: string;
+  gallery_urls?: string[];
+  contact_email?: string;
+  contact_phone?: string;
+  contact_whatsapp?: string;
+  featured: boolean;
+  available: boolean;
 }
 
 const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // Fallback demo data
-  const fallbackCars: Car[] = [
-    {
-      id: "1",
-      make: "Toyota",
-      model: "RAV4",
-      year: 2020,
-      mileage: "45,000 km",
-      status: "sale",
-      images: ["/src/assets/hondarv4.jpg"],
-      description: "Well-maintained Toyota RAV4 with excellent fuel efficiency and reliability.",
-    },
-    {
-      id: "2", 
-      make: "Honda",
-      model: "CR-V",
-      year: 2019,
-      mileage: "38,000 km",
-      status: "rent",
-      images: ["/src/assets/toyotarav4.jpg"],
-      description: "Spacious Honda CR-V perfect for family trips and business use.",
-    },
-    {
-      id: "3",
-      make: "Mazda",
-      model: "CX-5", 
-      year: 2021,
-      mileage: "25,000 km",
-      status: "sale",
-      images: ["/src/assets/maadison.jpg"],
-      description: "Premium Mazda CX-5 with advanced safety features and luxury interior.",
-    },
-    {
-      id: "4",
-      make: "Nissan",
-      model: "X-Trail",
-      year: 2018,
-      mileage: "52,000 km", 
-      status: "rent",
-      images: ["/placeholder.svg"],
-      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
-    },
-    {
-      id: "5",
-      make: "Nissan",
-      model: "X-Trail",
-      year: 2018,
-      mileage: "52,000 km", 
-      status: "rent",
-      images: ["/placeholder.svg"],
-      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
-    },
-    {
-      id: "6",
-      make: "Nissan",
-      model: "X-Trail",
-      year: 2018,
-      mileage: "52,000 km", 
-      status: "rent",
-      images: ["/placeholder.svg"],
-      description: "Reliable Nissan X-Trail ideal for adventures and daily commuting.",
-    },
-  ];
 
   useEffect(() => {
     fetchCars();
@@ -95,18 +45,20 @@ const FeaturedCars = () => {
       const { data, error } = await supabase
         .from('cars')
         .select('*')
+        .eq('available', true)
+        .eq('featured', true)
         .order('created_at', { ascending: false })
         .limit(6);
 
       if (error) {
         console.error('Error fetching cars:', error);
-        setCars(fallbackCars);
+        setCars([]);
       } else {
-        setCars(data || fallbackCars);
+        setCars(data || []);
       }
     } catch (error) {
       console.error('Error:', error);
-      setCars(fallbackCars);
+      setCars([]);
     } finally {
       setLoading(false);
     }
@@ -116,19 +68,36 @@ const FeaturedCars = () => {
     setSelectedCar(car);
   };
 
+  if (loading) {
+    return (
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p className="text-muted-foreground">Loading cars...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">USED CARS FOR SALE</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4">FEATURED CARS</h2>
           <h4 className="text-2xl font-bold text-primary mb-4">HOT DEALS</h4>
 
           <p className="text-muted-foreground max-w-2xl mx-auto">
           Certified& Inspected Cars<span className="text-primary"> "Imodoka zigenzuwe &zifite ibyangombwa"</span>       </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {cars.map((car) => (
+        {cars.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No featured cars available at the moment.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {cars.map((car) => (
             <Card 
               key={car.id} 
               className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer bg-card border-border"
@@ -136,31 +105,35 @@ const FeaturedCars = () => {
             >
               <div className="aspect-video overflow-hidden">
                 <img
-                  src={car.images[0]}
-                  alt={`${car.make} ${car.model}`}
+                  src={car.image_url || "/placeholder.svg"}
+                  alt={car.title || `${car.brand} ${car.model}`}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <CardContent className="p-4">
                 <h3 className="font-semibold text-lg text-foreground">
-                  {car.make} {car.model}
+                  {car.brand} {car.model}
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                  {car.year} • {car.mileage}
+                  {car.year} • {car.mileage ? `${car.mileage.toLocaleString()} km` : 'N/A'}
+                </p>
+                <p className="text-primary font-bold mb-2">
+                  {car.price ? `${car.price.toLocaleString()} ${car.currency}` : 'Price on request'}
                 </p>
                 <div className="mt-2">
                   <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                    car.status === 'sale' 
+                    car.type === 'sale' 
                       ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
                       : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                   }`}>
-                    {car.status === 'sale' ? 'For Sale' : 'For Rent'}
+                    {car.type === 'sale' ? 'For Sale' : 'For Rent'}
                   </span>
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="text-center mt-8">
           <Button variant="outline" asChild>
@@ -173,7 +146,7 @@ const FeaturedCars = () => {
           <DialogContent className="max-w-2xl bg-card border-border">
             <DialogHeader>
               <DialogTitle className="text-foreground">
-                {selectedCar?.make} {selectedCar?.model} ({selectedCar?.year})
+                {selectedCar?.title || `${selectedCar?.brand} ${selectedCar?.model} (${selectedCar?.year})`}
               </DialogTitle>
             </DialogHeader>
             
@@ -181,8 +154,8 @@ const FeaturedCars = () => {
               <div className="space-y-4">
                 <div className="aspect-video overflow-hidden rounded-lg">
                   <img
-                    src={selectedCar.images[0]}
-                    alt={`${selectedCar.make} ${selectedCar.model}`}
+                    src={selectedCar.image_url || "/placeholder.svg"}
+                    alt={selectedCar.title || `${selectedCar.brand} ${selectedCar.model}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -194,27 +167,67 @@ const FeaturedCars = () => {
                   </div>
                   <div>
                     <span className="font-medium text-foreground">Mileage:</span>
-                    <span className="ml-2 text-muted-foreground">{selectedCar.mileage}</span>
+                    <span className="ml-2 text-muted-foreground">
+                      {selectedCar.mileage ? `${selectedCar.mileage.toLocaleString()} km` : 'N/A'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-foreground">Price:</span>
+                    <span className="ml-2 text-primary font-bold">
+                      {selectedCar.price ? `${selectedCar.price.toLocaleString()} ${selectedCar.currency}` : 'Price on request'}
+                    </span>
                   </div>
                   <div>
                     <span className="font-medium text-foreground">Status:</span>
                     <span className="ml-2 text-muted-foreground">
-                      {selectedCar.status === 'sale' ? 'For Sale' : 'For Rent'}
+                      {selectedCar.type === 'sale' ? 'For Sale' : 'For Rent'}
                     </span>
                   </div>
+                  <div>
+                    <span className="font-medium text-foreground">Transmission:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.transmission}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-foreground">Fuel:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.fuel_type}</span>
+                  </div>
                 </div>
+
+                {selectedCar.features && selectedCar.features.length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-foreground mb-2">Features:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCar.features.map((feature, index) => (
+                        <span 
+                          key={index}
+                          className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-xs"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 <p className="text-muted-foreground">{selectedCar.description}</p>
                 
                 <div className="flex flex-wrap gap-3 pt-4">
                   <Button variant="default" asChild>
-                    <a href="tel:+250788239593" className="flex items-center gap-2">
+                    <a 
+                      href={`tel:${selectedCar.contact_phone || '+250788239593'}`} 
+                      className="flex items-center gap-2"
+                    >
                       <Phone className="w-4 h-4" />
                       Call
                     </a>
                   </Button>
                   <Button variant="outline" asChild>
-                    <a href="https://wa.me/250788239593" className="flex items-center gap-2">
+                    <a 
+                      href={`https://wa.me/${selectedCar.contact_whatsapp?.replace('+', '') || '250788239593'}`} 
+                      className="flex items-center gap-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <MessageCircle className="w-4 h-4" />
                       WhatsApp
                     </a>
