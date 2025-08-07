@@ -34,29 +34,75 @@ export function AboutModal() {
             </p>
           </div>
 
-          {/* Mission & Vision */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-primary" />
-                <h4 className="text-lg font-semibold">Our Mission</h4>
-              </div>
-              <p className="text-muted-foreground">
-                To provide exceptional automotive solutions by connecting Rwandans with quality, 
-                reliable vehicles while delivering outstanding customer service and building 
-                lasting relationships.
-              </p>
-            </div>
+          {/* Our Journey */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              Our Journey
+            </h4>
+            <p className="text-muted-foreground">
+              Since our founding in 2019, Jomar Motors has been on a remarkable journey of growth and service excellence. 
+              What started as a vision to transform Rwanda's automotive landscape has evolved into a trusted partnership 
+              with thousands of satisfied customers across the country.
+            </p>
+          </div>
+
+          {/* Evolution and Growth */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary" />
+              Evolution and Growth
+            </h4>
+            <p className="text-muted-foreground">
+              Our continuous evolution reflects our commitment to meeting the changing needs of Rwanda's automotive market. 
+              From expanding our vehicle inventory to enhancing our service offerings, we've grown alongside our customers, 
+              always staying ahead of industry trends and technological advancements.
+            </p>
+          </div>
+
+          {/* Our Current Focus */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
+              Our Current Focus
+            </h4>
+            <p className="text-muted-foreground">
+              Today, we focus on delivering comprehensive automotive solutions that encompass sales, rentals, 
+              and consultancy services. Our current initiatives include expanding our certified vehicle program, 
+              enhancing digital customer experiences, and strengthening our nationwide service network.
+            </p>
+          </div>
+
+          {/* Vision & Mission */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-semibold flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              Our Vision & Mission
+            </h4>
             
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-primary" />
-                <h4 className="text-lg font-semibold">Our Vision</h4>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary" />
+                  <h5 className="text-base font-semibold">Our Vision</h5>
+                </div>
+                <p className="text-muted-foreground">
+                  To become Rwanda's leading automotive business group, recognized for transforming transportation 
+                  accessibility and empowering every Rwandan with reliable, quality vehicles that drive personal 
+                  and economic growth.
+                </p>
               </div>
-              <p className="text-muted-foreground">
-                To be Rwanda's leading automotive service provider, recognized for quality, 
-                innovation, and unwavering commitment to customer satisfaction in every transaction.
-              </p>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-primary" />
+                  <h5 className="text-base font-semibold">Our Mission</h5>
+                </div>
+                <p className="text-muted-foreground">
+                  We are committed to making quality transportation accessible to everyone in Rwanda while building 
+                  lasting relationships with our customers based on trust, transparency, and exceptional service.
+                </p>
+              </div>
             </div>
           </div>
 
