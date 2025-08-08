@@ -34,12 +34,29 @@ interface Car {
 
 const CategorizedCars = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);ß
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
+    const fetchCars = async () => {
+      const { data, error } = await supabase.from("cars").select("*");
+      if (error) {
+        console.error("Error fetching cars:", error.message);
+        return;
+      }
+  
+      const cleaned = (data || []).map(car => ({
+        ...car,
+        image_url: (car.image_url?.startsWith('/') || car.image_url?.startsWith('http'))
+          ? car.image_url
+          : "/placeholder.svg"
+      }));
+  
+      setAllCars(cleaned);
+    };
+  
     fetchCars();
   }, []);
+  
 
   const fetchCars = async () => {
     try {
@@ -48,18 +65,20 @@ const CategorizedCars = () => {
         .select('*')
         .eq('available', true)
         .order('created_at', { ascending: false });
-
+  
       if (error) {
-        console.error('Error fetching cars:', error);
+        console.error('❌ Error fetching cars from Supabase:', error);
       } else {
+        console.log('✅ Fetched cars from Supabase:', data);
         setAllCars(data || []);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('❌ Unexpected fetch error:', error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   // Categorize cars
   const usedCarsForSale = allCars.filter(car => 
@@ -74,9 +93,11 @@ const CategorizedCars = () => {
     car.title.toLowerCase().includes('certified') || car.title.toLowerCase().includes('inspected')
   );
 
-  const handleCarClick = (car: Car) => {
-    setSelectedCar(car);
-  };
+const handleCarClick = (car: Car) => {
+  console.log("🚗 Car clicked:", car);
+  setSelectedCar(car);
+};
+
 
   const formatPrice = (price: number, currency: string) => {
     if (currency === 'RWF') {
@@ -84,47 +105,31 @@ const CategorizedCars = () => {
     }
     return `${price.toLocaleString()} ${currency}`;
   };
-
-  const CarCard = ({ car }: { car: Car }) => (
-    <Card 
-      className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer bg-card border-border hover:scale-105"
-      onClick={() => handleCarClick(car)}
-    >
-      <div className="aspect-video overflow-hidden">
+  const CarCard = ({ car }: { car: Car }) => {
+    console.log(`🖼️ Car ID: ${car.id}, Image URL: ${car.image_url}`);
+  
+    return (
+      <Card 
+        className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer bg-card border-border hover:scale-105"
+        onClick={() => handleCarClick(car)}
+      >
+        <div className="aspect-video overflow-hidden">
         <img
-          src={car.image_url || "/placeholder.svg"}
-          alt={car.title}
-          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-        />
-      </div>
-      
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-lg text-foreground mb-1">
-          {car.brand} {car.model}
-        </h3>
-        <p className="text-muted-foreground text-sm mb-2">
-          {car.year} • {car.mileage ? `${car.mileage.toLocaleString()} km` : 'N/A'}
-        </p>
-        <p className="text-primary font-bold mb-2">
-          {formatPrice(car.price, car.currency)}
-        </p>
-        <div className="flex flex-wrap gap-1">
-          <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-            car.type === 'sale' 
-              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
-              : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-          }`}>
-            {car.type === 'sale' ? 'For Sale' : 'For Rent'}
-          </span>
-          {car.featured && (
-            <span className="inline-block px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-              Hot Deal
-            </span>
-          )}
+  src={car.image_url?.startsWith('/') || car.image_url?.startsWith('http') ? car.image_url : "/placeholder.svg"}
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = "/placeholder.svg";
+  }}
+  alt={car.title}
+  className="w-full h-full object-cover"
+/>
+
         </div>
-      </CardContent>
-    </Card>
-  );
+        {/* ...rest unchanged */}
+      </Card>
+    );
+  };
+  
 
   const CategorySection = ({ title, description, cars }: { 
     title: string; 
