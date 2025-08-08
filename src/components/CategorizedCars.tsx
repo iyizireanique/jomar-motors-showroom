@@ -279,7 +279,7 @@ const CategorizedCars = () => {
                 <div className="flex flex-wrap gap-3 pt-4">
                   <Button variant="default" asChild>
                     <a 
-                      href={`tel:${selectedCar.contact_phone || '+250788123456'}`} 
+                      href={`tel:${selectedCar.contact_phone || '+250796684401'}`} 
                       className="flex items-center gap-2"
                     >
                       <Phone className="w-4 h-4" />
@@ -288,7 +288,7 @@ const CategorizedCars = () => {
                   </Button>
                   <Button variant="outline" asChild>
                     <a 
-                      href={`https://wa.me/${selectedCar.contact_whatsapp?.replace('+', '') || '250788123456'}`} 
+                      href={`https://wa.me/${selectedCar.contact_whatsapp?.replace('+', '') || '250796684401'}`} 
                       className="flex items-center gap-2"
                       target="_blank"
                       rel="noopener noreferrer"

@@ -6,15 +6,15 @@ const ContactStrip = ({ id }: { id?: string }) => {
     {
       icon: Phone,
       label: "Call Us",
-      value: "+250 788 239 593",
-      href: "tel:+250788239593",
+      value: "+250 796 684 401",
+      href: "tel:+250796684401",
       color: "text-green-400"
     },
     {
       icon: MessageCircle,
       label: "WhatsApp",
       value: "Chat Now",
-      href: "https://wa.me/250788239593",
+      href: "https://wa.me/250796684401",
       color: "text-green-500"
     },
     {
