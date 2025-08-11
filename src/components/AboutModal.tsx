@@ -171,13 +171,13 @@ export function AboutModal() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="outline" asChild>
-                <a href="tel:+250788239593" className="flex items-center gap-2">
+                <a href="tel:+250796684401" className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  +250 788 239 593
+                  +250 796 684 401
                 </a>
               </Button>
               <Button variant="outline" asChild>
-                <a href="https://wa.me/250788239593" className="flex items-center gap-2">
+                <a href="https://wa.me/250796684401" className="flex items-center gap-2">
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
                 </a>

@@ -55,6 +55,17 @@ interface PopularRentalCar {
   image?: string;
 }
 
+interface PopularSaleCar {
+  id: number;
+  brand: string;
+  model: string;
+  price: number;
+  currency: string;
+  available: number;
+  year: number;
+  image?: string;
+}
+
 // Sample data for popular rental cars
 const POPULAR_RENTAL_CARS: PopularRentalCar[] = [
   {
@@ -109,6 +120,70 @@ const POPULAR_RENTAL_CARS: PopularRentalCar[] = [
     price: 32000,
     currency: "RWF",
     available: 3,
+    image: "/api/placeholder/300/200"
+  }
+];
+
+// Sample data for popular cars for sale
+const POPULAR_SALE_CARS: PopularSaleCar[] = [
+  {
+    id: 1,
+    brand: "Toyota",
+    model: "Camry",
+    price: 15000000,
+    currency: "RWF",
+    available: 3,
+    year: 2020,
+    image: "/api/placeholder/300/200"
+  },
+  {
+    id: 2,
+    brand: "Honda",
+    model: "Accord",
+    price: 18000000,
+    currency: "RWF",
+    available: 2,
+    year: 2021,
+    image: "/api/placeholder/300/200"
+  },
+  {
+    id: 3,
+    brand: "Toyota",
+    model: "RAV4",
+    price: 22000000,
+    currency: "RWF",
+    available: 4,
+    year: 2019,
+    image: "/api/placeholder/300/200"
+  },
+  {
+    id: 4,
+    brand: "Nissan",
+    model: "Altima",
+    price: 14000000,
+    currency: "RWF",
+    available: 1,
+    year: 2020,
+    image: "/api/placeholder/300/200"
+  },
+  {
+    id: 5,
+    brand: "Hyundai",
+    model: "Sonata",
+    price: 16000000,
+    currency: "RWF",
+    available: 5,
+    year: 2021,
+    image: "/api/placeholder/300/200"
+  },
+  {
+    id: 6,
+    brand: "Mazda",
+    model: "CX-5",
+    price: 19500000,
+    currency: "RWF",
+    available: 2,
+    year: 2020,
     image: "/api/placeholder/300/200"
   }
 ];

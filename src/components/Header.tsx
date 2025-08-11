@@ -52,14 +52,12 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=sale">Buy Cars</Link>
+                  <Link to="/cars?filter=sale">Buy </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=rent">Rental Cars</Link>
+                  <Link to="/cars?filter=rent">Rental </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/cars">All Cars</Link>
-                </DropdownMenuItem>
+  
                 <DropdownMenuItem asChild>
                   <Link to="/buying-guide">Buying Consultancy</Link>
                 </DropdownMenuItem>
