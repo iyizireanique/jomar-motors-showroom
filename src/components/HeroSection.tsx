@@ -13,12 +13,15 @@ import carRebero from "@/assets/car-rebero-1.jpg";
 import carGatsata from "@/assets/car-gatsata-1.jpg";
 import carKacyiru from "@/assets/car-kacyiru-1.jpg";
 import carGisozi from "@/assets/car-gisozi-1.jpg";
-
+import aaa from "/src/assets/aaa.jpeg";
+import aaa1 from "/src/assets/aaa1.jpeg";
+import aaa2 from "/src/assets/aaa2.jpeg";
+import aaa3 from "/src/assets/aaa3.jpeg";
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const backgroundImages = [
-    carKcc, carArena, carKimisagara, carNyabugogo, carCityTower,
-    carUr, carRebero, carGatsata, carKacyiru, carGisozi
+    carKcc, carArena, carKimisagara, aaa1, carNyabugogo,aaa, carCityTower,
+    carUr,aaa3, carRebero, carGatsata,  aaa2,carKacyiru, carGisozi, 
   ];
 
   useEffect(() => {
