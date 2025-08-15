@@ -36,7 +36,6 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Auto-changing Background Images with Overlay */}
       <div className="absolute inset-0">
         {backgroundImages.map((image, index) => (
           <motion.img
