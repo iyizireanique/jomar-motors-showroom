@@ -14,11 +14,11 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-primary">JOMAR MOTORS RWANDA</h3>
-                <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA ZAKOZE RYIZEWE</p>
+                <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA  RYIZEWE</p>
               </div>
             </div>
             <p className="text-gray-400 text-sm">
-              Your trusted automotive partner in Rwanda since 2019. We specialize in quality used cars, 
+              Your trusted automotive partner in Rwanda since 2019. We specialize in quality cars, 
               rentals, and comprehensive automotive solutions.
             </p>
             <p className="text-xs text-muted-foreground">
