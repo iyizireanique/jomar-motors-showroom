@@ -8,69 +8,65 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Phone, MessageCircle, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
+// 1. Import the localCars data
+import { localCars } from "@/pages/localCars";
+
+// 2. Adjust the interface to match your localCars data structure
 interface Car {
   id: string;
-  make: string;
+  title: string;
+  brand: string;
   model: string;
   year: number;
-  mileage: string;
+  price: number;
+  currency: string;
+  type: "sale" | "rent";
+  fuel_type: string;
   transmission: string;
-  fuelType: string;
-  engine: string;
-  status: "sale" | "rent";
-  images: string[];
+  seats: number;
+  mileage: number;
+  location: string;
   description: string;
-  price?: string;
   features: string[];
+  image_url: string;
+  contact_phone: string;
+  contact_whatsapp: string;
+  featured: boolean;
+  available: boolean;
 }
 
 const CarDetails = () => {
   const { id } = useParams();
-  const [car, setCar] = useState<Car | null>(null);
+  // Use the imported localCars array element type for state to avoid duplicate 'Car' type conflicts
+  const [car, setCar] = useState<typeof localCars[number] | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    // Demo car data - in real app this would come from API
-    const demoCar: Car = {
-      id: id!,
-      make: "Toyota",
-      model: "Camry",
-      year: 2020,
-      mileage: "45,000 km",
-      transmission: "Automatic",
-      fuelType: "Petrol",
-      engine: "2.5L",
-      status: "sale",
-      images: ["/src/assets/toyotacarimiry.jpg", "/src/assets/toyotacarmy.jpg", "/src/assets/toyotacarmy.jpg"],
-      description: "This well-maintained Toyota Camry is in excellent condition and perfect for both city driving and long trips. The vehicle has been regularly serviced and comes with a complete maintenance history.",
-      price: "$25,000",
-      features: [
-        "Air Conditioning",
-        "Power Steering",
-        "Electric Windows",
-        "Central Locking",
-        "ABS Brakes",
-        "Airbags",
-        "Bluetooth Connectivity",
-        "Backup Camera",
-        "Cruise Control",
-        "Alloy Wheels"
-      ]
-    };
-    setCar(demoCar);
+    // 3. Find the car with the matching ID from the localCars array
+    const foundCar = localCars.find(c => c.id === id);
+
+    if (foundCar) {
+      setCar(foundCar);
+    } else {
+      // Handle case where car is not found
+      setCar(null);
+    }
   }, [id]);
 
+  // Gallery functionality is now dependent on a `gallery_urls` property, which your localCars data
+  // does not have. For now, we will use the single `image_url`. You can expand this later.
+  // The gallery logic is disabled or simplified since there is only one image URL.
   const nextImage = () => {
-    if (car) {
-      setCurrentImageIndex((prev) => (prev + 1) % car.images.length);
-    }
+    // No gallery functionality for now
   };
 
   const prevImage = () => {
-    if (car) {
-      setCurrentImageIndex((prev) => (prev - 1 + car.images.length) % car.images.length);
-    }
+    // No gallery functionality for now
   };
+  
+  // Create an array of images to handle the gallery.
+  // For now, it will just contain the main image URL.
+  const images = car ? [car.image_url] : [];
 
   if (!car) {
     return (
@@ -107,12 +103,14 @@ const CarDetails = () => {
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-video overflow-hidden rounded-lg">
+              {/* Use the car's image_url directly */}
               <img
-                src={car.images[currentImageIndex]}
-                alt={`${car.make} ${car.model}`}
+                src={car.image_url}
+                alt={`${car.brand} ${car.model}`}
                 className="w-full h-full object-cover"
               />
-              {car.images.length > 1 && (
+              {/* Gallery navigation is now hidden as there's only one image */}
+              {images.length > 1 && (
                 <>
                   <button
                     onClick={prevImage}
@@ -131,9 +129,9 @@ const CarDetails = () => {
             </div>
             
             {/* Image Thumbnails */}
-            {car.images.length > 1 && (
+            {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
-                {car.images.map((image, index) => (
+                {images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
@@ -156,13 +154,15 @@ const CarDetails = () => {
           <div className="space-y-6">
             <div>
               <div className="flex justify-between items-start mb-2">
-                <h1 className="text-3xl font-bold text-white">{car.make} {car.model}</h1>
-                <Badge variant={car.status === "sale" ? "default" : "secondary"}>
-                  {car.status === "sale" ? "For Sale" : "For Rent"}
+                <h1 className="text-3xl font-bold text-white">{car.brand} {car.model}</h1>
+                <Badge variant={car.type === "sale" ? "default" : "secondary"}>
+                  {car.type === "sale" ? "For Sale" : "For Rent"}
                 </Badge>
               </div>
               {car.price && (
-                <p className="text-3xl font-bold text-primary mb-4">{car.price}</p>
+                <p className="text-3xl font-bold text-primary mb-4">
+                  {car.price.toLocaleString()} {car.currency}
+                </p>
               )}
               <p className="text-muted-foreground">{car.description}</p>
             </div>
@@ -178,7 +178,7 @@ const CarDetails = () => {
                   </div>
                   <div>
                     <span className="text-muted-foreground">Mileage:</span>
-                    <span className="ml-2 text-white">{car.mileage}</span>
+                    <span className="ml-2 text-white">{car.mileage.toLocaleString()} km</span>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Transmission:</span>
@@ -186,11 +186,11 @@ const CarDetails = () => {
                   </div>
                   <div>
                     <span className="text-muted-foreground">Fuel Type:</span>
-                    <span className="ml-2 text-white">{car.fuelType}</span>
+                    <span className="ml-2 text-white">{car.fuel_type}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Engine:</span>
-                    <span className="ml-2 text-white">{car.engine}</span>
+                    <span className="text-muted-foreground">Location:</span>
+                    <span className="ml-2 text-white">{car.location}</span>
                   </div>
                 </div>
               </CardContent>
@@ -216,13 +216,13 @@ const CarDetails = () => {
               <h3 className="text-xl font-semibold text-white">Interested? Get in Touch</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Button size="lg" asChild>
-                  <a href="tel:+250788239593" className="flex items-center justify-center gap-2">
+                  <a href={`tel:${car.contact_phone}`} className="flex items-center justify-center gap-2">
                     <Phone className="w-5 h-5" />
                     Call Now
                   </a>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>
-                  <a href="https://wa.me/250788239593" className="flex items-center justify-center gap-2">
+                  <a href={`https://wa.me/${car.contact_whatsapp}`} className="flex items-center justify-center gap-2" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-5 h-5" />
                     WhatsApp
                   </a>

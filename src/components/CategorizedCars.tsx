@@ -4,8 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
+// Import localCars data
+import { localCars } from "@/pages/localCars";
 
 interface Car {
   id: string;
@@ -36,68 +38,34 @@ const CategorizedCars = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // UseEffect hook to load only localCars
   useEffect(() => {
-    const fetchCars = async () => {
-      const { data, error } = await supabase.from("cars").select("*");
-      if (error) {
-        console.error("Error fetching cars:", error.message);
-        return;
-      }
-  
-      const cleaned = (data || []).map(car => ({
-        ...car,
-        image_url: (car.image_url?.startsWith('/') || car.image_url?.startsWith('http'))
-          ? car.image_url
-          : "/placeholder.svg"
-      }));
-  
-      setAllCars(cleaned);
-    };
-  
-    fetchCars();
+    setAllCars(localCars);
+    setLoading(false);
   }, []);
   
-
-  const fetchCars = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('cars')
-        .select('*')
-        .eq('available', true)
-        .order('created_at', { ascending: false });
-  
-      if (error) {
-        console.error('❌ Error fetching cars from Supabase:', error);
-      } else {
-        console.log('✅ Fetched cars from Supabase:', data);
-        setAllCars(data || []);
-      }
-    } catch (error) {
-      console.error('❌ Unexpected fetch error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-
-  // Categorize cars
-  const usedCarsForSale = allCars.filter(car => 
-    car.type === 'sale' && !car.featured && !car.title.toLowerCase().includes('certified')
-  );
-
+  // Categorize cars with a clear hierarchy to avoid duplication
   const hotDeals = allCars.filter(car => 
-    car.featured || car.title.toLowerCase().includes('hot deal') || car.title.toLowerCase().includes('special')
+    car.featured || car.title.toLowerCase().includes('hot deal')
   );
-
+  
   const certifiedCars = allCars.filter(car => 
-    car.title.toLowerCase().includes('certified') || car.title.toLowerCase().includes('inspected')
+    (car.title.toLowerCase().includes('certified') || car.title.toLowerCase().includes('inspected')) && !hotDeals.some(hd => hd.id === car.id)
   );
 
-const handleCarClick = (car: Car) => {
-  console.log("🚗 Car clicked:", car);
-  setSelectedCar(car);
-};
+  const usedCarsForSale = allCars.filter(car => 
+    car.type === 'sale' && !hotDeals.some(hd => hd.id === car.id) && !certifiedCars.some(cc => cc.id === car.id)
+  );
 
+  const rentalCars = allCars.filter(car => 
+    car.type === 'rent'
+  );
+
+
+  const handleCarClick = (car: Car) => {
+    setSelectedCar(car);
+  };
 
   const formatPrice = (price: number, currency: string) => {
     if (currency === 'RWF') {
@@ -105,27 +73,31 @@ const handleCarClick = (car: Car) => {
     }
     return `${price.toLocaleString()} ${currency}`;
   };
+
   const CarCard = ({ car }: { car: Car }) => {
-    console.log(`🖼️ Car ID: ${car.id}, Image URL: ${car.image_url}`);
-  
     return (
       <Card 
         className="overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer bg-card border-border hover:scale-105"
         onClick={() => handleCarClick(car)}
       >
         <div className="aspect-video overflow-hidden">
-        <img
-  src={car.image_url?.startsWith('/') || car.image_url?.startsWith('http') ? car.image_url : "/placeholder.svg"}
-  onError={(e) => {
-    e.currentTarget.onerror = null;
-    e.currentTarget.src = "/placeholder.svg";
-  }}
-  alt={car.title}
-  className="w-full h-full object-cover"
-/>
-
+          <img
+            src={car.image_url || "/placeholder.svg"}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/placeholder.svg";
+            }}
+            alt={car.title}
+            className="w-full h-full object-cover"
+          />
         </div>
-        {/* ...rest unchanged */}
+        <CardContent className="p-4">
+          <h3 className="text-lg font-semibold text-foreground truncate">{car.title}</h3>
+          <p className="text-sm text-muted-foreground">{car.year} • {car.location}</p>
+          <div className="mt-2 text-xl font-bold text-primary">
+            {formatPrice(car.price, car.currency)}
+          </div>
+        </CardContent>
       </Card>
     );
   };
@@ -184,35 +156,37 @@ const handleCarClick = (car: Car) => {
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         
-        {/* Hot Deals Section */}
-        
         <CategorySection 
           title="HOT DEALS"
-          description="Imodoka zigenzuwe & zifite ibyangombwa - Professionally inspected and certified vehicles"
+          description="Professionally inspected and hot deal vehicles."
           cars={hotDeals}
         />
-
-        {/* Certified & Inspected Cars */}
+        
         <CategorySection 
-          title="Certified& Inspected Cars"
-          description="Imodoka zigenzuwe &zifite ibyangombwa"
+          title="Certified & Inspected Cars"
+          description="Imodoka zigenzuwe & zifite ibyangombwa"
           cars={certifiedCars}
         />
 
-        {/* Used Cars for Sale */}
         <CategorySection 
           title="USED CARS FOR SALE"
           description="Quality pre-owned vehicles ready for new owners"
           cars={usedCarsForSale}
         />
-
+        
+        <CategorySection
+          title="Rental Cars"
+          description="Vehicles available for short and long-term rental"
+          cars={rentalCars}
+        />
+        
         <div className="text-center mt-12">
           <Button variant="outline" size="lg" asChild>
             <Link to="/cars">View All Cars</Link>
           </Button>
         </div>
 
-        {/* Car Details Modal */}
+        {/* Car Details Modal (unchanged) */}
         <Dialog open={!!selectedCar} onOpenChange={() => setSelectedCar(null)}>
           <DialogContent className="max-w-2xl bg-card border-border">
             <DialogHeader>

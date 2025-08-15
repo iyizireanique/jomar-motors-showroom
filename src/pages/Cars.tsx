@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CarFilters, { FilterState } from "@/components/CarFilters";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Phone, MessageCircle, Eye, Car } from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { supabase } from "@/integrations/supabase/client";
+// Import localCars data
+import { localCars } from "@/pages/localCars";
 
-interface Car {
+interface LocalCar {
   id: string;
   title: string;
   brand: string;
@@ -37,212 +38,49 @@ interface Car {
 }
 
 interface PriceRange {
-  brand: string;
-  model: string;
+  groupName: string;
   minPrice: number;
   maxPrice: number;
   currency: string;
-  count: number;
+  count?: number;
 }
 
-interface PopularRentalCar {
-  id: number;
-  brand: string;
-  model: string;
-  price: number;
-  currency: string;
-  available: number;
-  image?: string;
-}
-
-interface PopularSaleCar {
-  id: number;
-  brand: string;
-  model: string;
-  price: number;
-  currency: string;
-  available: number;
-  year: number;
-  image?: string;
-}
-
-// Sample data for popular rental cars
-const POPULAR_RENTAL_CARS: PopularRentalCar[] = [
-  {
-    id: 1,
-    brand: "Toyota",
-    model: "Prius",
-    price: 30000,
-    currency: "RWF",
-    available: 5,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 2,
-    brand: "Honda",
-    model: "Civic",
-    price: 25000,
-    currency: "RWF",
-    available: 3,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 3,
-    brand: "Toyota",
-    model: "Corolla",
-    price: 28000,
-    currency: "RWF",
-    available: 4,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 4,
-    brand: "Nissan",
-    model: "Sentra",
-    price: 22000,
-    currency: "RWF",
-    available: 2,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 5,
-    brand: "Hyundai",
-    model: "Elantra",
-    price: 26000,
-    currency: "RWF",
-    available: 6,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 6,
-    brand: "Volkswagen",
-    model: "Jetta",
-    price: 32000,
-    currency: "RWF",
-    available: 3,
-    image: "/api/placeholder/300/200"
-  }
-];
-
-// Sample data for popular cars for sale
-const POPULAR_SALE_CARS: PopularSaleCar[] = [
-  {
-    id: 1,
-    brand: "Toyota",
-    model: "Camry",
-    price: 15000000,
-    currency: "RWF",
-    available: 3,
-    year: 2020,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 2,
-    brand: "Honda",
-    model: "Accord",
-    price: 18000000,
-    currency: "RWF",
-    available: 2,
-    year: 2021,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 3,
-    brand: "Toyota",
-    model: "RAV4",
-    price: 22000000,
-    currency: "RWF",
-    available: 4,
-    year: 2019,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 4,
-    brand: "Nissan",
-    model: "Altima",
-    price: 14000000,
-    currency: "RWF",
-    available: 1,
-    year: 2020,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 5,
-    brand: "Hyundai",
-    model: "Sonata",
-    price: 16000000,
-    currency: "RWF",
-    available: 5,
-    year: 2021,
-    image: "/api/placeholder/300/200"
-  },
-  {
-    id: 6,
-    brand: "Mazda",
-    model: "CX-5",
-    price: 19500000,
-    currency: "RWF",
-    available: 2,
-    year: 2020,
-    image: "/api/placeholder/300/200"
-  }
+const RENTAL_PRICE_RANGES = [
+  { groupName: "Economy Car", minPrice: 30000, maxPrice: 45000, currency: "RWF" },
+  { groupName: "Sedan", minPrice: 40000, maxPrice: 60000, currency: "RWF" },
+  { groupName: "Compact SUV", minPrice: 50000, maxPrice: 75000, currency: "RWF" },
+  { groupName: "Mid-Size SUV", minPrice: 70000, maxPrice: 90000, currency: "RWF" },
+  { groupName: "Full-Size SUV", minPrice: 85000, maxPrice: 120000, currency: "RWF" },
+  { groupName: "Van", minPrice: 60000, maxPrice: 90000, currency: "RWF" },
+  { groupName: "Mini Bus (15-seater)", minPrice: 100000, maxPrice: 150000, currency: "RWF" },
+  { groupName: "Truck", minPrice: 120000, maxPrice: 200000, currency: "RWF" },
+  { groupName: "Luxury Sedan", minPrice: 150000, maxPrice: 300000, currency: "RWF" },
+  { groupName: "Sports Car", minPrice: 200000, maxPrice: 500000, currency: "RWF" },
 ];
 
 const Cars = () => {
-  const [cars, setCars] = useState<Car[]>([]);
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [cars, setCars] = useState<LocalCar[]>([]);
+  const [selectedCar, setSelectedCar] = useState<LocalCar | null>(null);
   const [filter, setFilter] = useState<"sale" | "rent">("sale");
-  const [filters, setFilters] = useState<FilterState>({
-    brands: [],
-    priceRange: [0, 100000000],
-    type: []
-  });
   const [loading, setLoading] = useState(true);
-  const [maxPrice, setMaxPrice] = useState(100000000);
-  const [priceRanges, setPriceRanges] = useState<PriceRange[]>([]);
+  const [salePriceRanges, setSalePriceRanges] = useState<PriceRange[]>([]);
 
   useEffect(() => {
-    fetchCars();
+    setCars(localCars as unknown as LocalCar[]);
+    setLoading(false);
   }, []);
 
-  const fetchCars = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('cars')
-        .select('*')
-        .eq('available', true)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching cars:', error);
-      } else {
-        const carsData = (data || []).map(car => ({
-          ...car,
-          type: car.type as "sale" | "rent"
-        }));
-        setCars(carsData);
-        
-        // Calculate max price for filter
-        const prices = carsData.map(car => car.price);
-        const max = Math.max(...prices, 100000000);
-        setMaxPrice(max);
-        setFilters(prev => ({ ...prev, priceRange: [0, max] }));
-        
-        // Calculate price ranges by brand/model
-        calculatePriceRanges(carsData);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (cars.length > 0) {
+      calculateSalePriceRanges(cars);
     }
-  };
+  }, [cars]);
 
-  const calculatePriceRanges = (carsData: Car[]) => {
+  const calculateSalePriceRanges = (carsData: LocalCar[]) => {
     const rangeMap = new Map<string, { prices: number[], currency: string, count: number }>();
     
     carsData
-      .filter(car => car.type === filter)
+      .filter(car => car.type === "sale")
       .forEach(car => {
         const key = `${car.brand} ${car.model}`;
         if (!rangeMap.has(key)) {
@@ -255,8 +93,7 @@ const Cars = () => {
     const ranges: PriceRange[] = Array.from(rangeMap.entries()).map(([key, data]) => {
       const [brand, model] = key.split(' ', 2);
       return {
-        brand,
-        model: model || '',
+        groupName: `${brand} ${model}`,
         minPrice: Math.min(...data.prices),
         maxPrice: Math.max(...data.prices),
         currency: data.currency,
@@ -264,40 +101,14 @@ const Cars = () => {
       };
     }).sort((a, b) => a.minPrice - b.minPrice);
 
-    setPriceRanges(ranges);
+    setSalePriceRanges(ranges);
   };
 
-  useEffect(() => {
-    if (cars.length > 0) {
-      calculatePriceRanges(cars);
-    }
-  }, [filter, cars]);
+  const filteredCars = cars.filter(car => car.type === filter);
+  const popularRentalCars = localCars.filter(car => car.type === 'rent' && car.featured);
+  const popularSaleCars = localCars.filter(car => car.type === 'sale' && car.featured);
 
-  const filteredCars = cars.filter(car => {
-    // Type filter
-    if (filter !== "sale" && filter !== "rent") return false;
-    if (car.type !== filter) return false;
-
-    // Brand filter
-    if (filters.brands.length > 0 && !filters.brands.includes(car.brand)) return false;
-
-    // Price filter
-    if (car.price < filters.priceRange[0] || car.price > filters.priceRange[1]) return false;
-
-    // Type filter from sidebar
-    if (filters.type.length > 0) {
-      const carTypeLabel = car.type === "sale" ? "For Sale" : "For Rent";
-      if (!filters.type.includes(carTypeLabel)) return false;
-    }
-
-    return true;
-  });
-
-  const handleFiltersChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-  };
-
-  const handleCarClick = (car: Car) => {
+  const handleCarClick = (car: LocalCar) => {
     setSelectedCar(car);
   };
 
@@ -313,7 +124,6 @@ const Cars = () => {
           <p className="text-gray-300 text-lg">Browse our collection of quality vehicles</p>
         </div>
 
-        {/* Filter Tabs */}
         <div className="flex justify-center mb-8">
           <div className="flex bg-card rounded-lg p-1">
             <button
@@ -339,68 +149,89 @@ const Cars = () => {
           </div>
         </div>
 
-        {/* Main Content with Price Ranges and Cars */}
+        {/* Conditional Layout for Sale vs. Rent */}
         <div className="flex gap-8">
-          {/* Left Sidebar - Price Ranges */}
-          <div className="w-80 space-y-4">
-            <Card className="bg-card border-border">
-              <CardHeader>
-                <CardTitle className="text-xl text-white flex items-center gap-2">
-                  <Car className="w-5 h-5" />
-                  {filter === "sale" ? "Sale" : "Rental"} Price Ranges
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {loading ? (
-                  <div className="text-center py-4">
-                    <p className="text-muted-foreground">Loading ranges...</p>
-                  </div>
-                ) : priceRanges.length > 0 ? (
-                  priceRanges.map((range, index) => (
-                    <div key={index} className="p-3 bg-background rounded-lg border border-border">
-                      <div className="flex justify-between items-center mb-1">
-                        <h4 className="font-semibold text-white">{range.brand} {range.model}</h4>
-                        <Badge variant="outline" className="text-xs">
-                          {range.count} car{range.count > 1 ? 's' : ''}
-                        </Badge>
+          {filter === "sale" && (
+            <>
+              {/* Left Sidebar for Sale Price Ranges */}
+              <div className="w-80 space-y-4">
+                <Card className="bg-card border-border">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-white flex items-center gap-2">
+                      <Car className="w-5 h-5" />
+                      Sale Price Ranges
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {loading ? (
+                      <div className="text-center py-4">
+                        <p className="text-muted-foreground">Loading ranges...</p>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        {range.minPrice === range.maxPrice ? (
-                          <span className="text-primary font-medium">
-                            {range.minPrice.toLocaleString()} {range.currency}
-                          </span>
-                        ) : (
-                          <span className="text-primary font-medium">
-                            {range.minPrice.toLocaleString()} - {range.maxPrice.toLocaleString()} {range.currency}
-                          </span>
-                        )}
+                    ) : salePriceRanges.length > 0 ? (
+                      salePriceRanges.map((range, index) => (
+                        <div key={index} className="p-3 bg-background rounded-lg border border-border">
+                          <div className="flex justify-between items-center mb-1">
+                            <h4 className="font-semibold text-white">{range.groupName}</h4>
+                            <Badge variant="outline" className="text-xs">
+                              {range.count} car{range.count > 1 ? 's' : ''}
+                            </Badge>
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {range.minPrice === range.maxPrice ? (
+                              <span className="text-primary font-medium">
+                                {range.minPrice.toLocaleString()} {range.currency}
+                              </span>
+                            ) : (
+                              <span className="text-primary font-medium">
+                                {range.minPrice.toLocaleString()} - {range.maxPrice.toLocaleString()} {range.currency}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-muted-foreground">No price ranges available</p>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="text-muted-foreground">No price ranges available</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Additional Filters for Rent */}
-            {filter === "rent" && (
-              <CarFilters 
-                onFiltersChange={handleFiltersChange}
-                priceRange={filters.priceRange}
-                maxPrice={maxPrice}
-              />
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <Separator orientation="vertical" className="h-auto" />
+            </>
+          )}
+          
+          <div className={`${filter === "rent" ? "flex-1" : ""}`}>
+            {filter === "rent" && !loading && (
+              <>
+                <div className="mb-8">
+                  <Card className="bg-card border-border">
+                    <CardHeader>
+                      <CardTitle className="text-xl text-white">Rental Price Ranges</CardTitle>
+                      <p className="text-muted-foreground">
+                        Our full range of rental vehicle types and their cost per day.
+                      </p>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {RENTAL_PRICE_RANGES.map((range, index) => (
+                          <div key={index} className="p-4 bg-background rounded-lg border border-border">
+                            <h4 className="font-semibold text-white">{range.groupName}</h4>
+                            <div className="text-sm text-muted-foreground mt-1">
+                              <span className="text-primary font-bold">
+                                {range.minPrice.toLocaleString()} - {range.maxPrice.toLocaleString()} {range.currency}/day
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </>
             )}
-          </div>
-          
-          {/* Separator */}
-          <Separator orientation="vertical" className="h-auto" />
-          
-          {/* Cars Grid */}
-          <div className="flex-1">
-            {/* Featured Rental Types - Only show for rent filter */}
+
             {filter === "rent" && !loading && (
               <div className="mb-8">
                 <Card className="bg-card border-border">
@@ -410,25 +241,65 @@ const Cars = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {POPULAR_RENTAL_CARS.map((car) => (
+                      {popularRentalCars.map((car) => (
                         <div key={car.id} className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Car className="w-4 h-4 text-primary" />
-                              <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
-                                {car.brand} {car.model}
-                              </h4>
+                          <Link to={`/car/${car.id}`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <Car className="w-4 h-4 text-primary" />
+                                <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
+                                  {car.brand} {car.model}
+                                </h4>
+                              </div>
+                              <Badge variant="secondary" className="text-xs">
+                                Available
+                              </Badge>
                             </div>
-                            <Badge variant="secondary" className="text-xs">
-                              {car.available} available
-                            </Badge>
-                          </div>
-                          <div className="text-primary font-bold text-sm">
-                            {car.price.toLocaleString()} {car.currency}/day
-                          </div>
-                          <div className="text-xs text-muted-foreground mt-1">
-                            Starting from
-                          </div>
+                            <div className="text-primary font-bold text-sm">
+                              {car.price.toLocaleString()} {car.currency}/day
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-1">
+                              Starting from
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+            
+            {filter === "sale" && !loading && (
+              <div className="mb-8">
+                <Card className="bg-card border-border">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-white">Popular Cars for Sale</CardTitle>
+                    <p className="text-muted-foreground">Quick overview of our most popular vehicles for sale</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {popularSaleCars.map((car) => (
+                        <div key={car.id} className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer group">
+                          <Link to={`/car/${car.id}`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <Car className="w-4 h-4 text-primary" />
+                                <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
+                                  {car.brand} {car.model}
+                                </h4>
+                              </div>
+                              <Badge variant="secondary" className="text-xs">
+                                Available
+                              </Badge>
+                            </div>
+                            <div className="text-primary font-bold text-sm">
+                              {car.price.toLocaleString()} {car.currency}
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-1">
+                              Year: {car.year}
+                            </div>
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -445,7 +316,7 @@ const Cars = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCars.map((car) => (
                   <Card key={car.id} className="bg-card border-border hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    <div onClick={() => handleCarClick(car)}>
+                    <Link to={`/car/${car.id}`}> 
                       <div className="aspect-video overflow-hidden rounded-t-lg">
                         <img
                           src={car.image_url || "/placeholder.svg"}
@@ -465,13 +336,15 @@ const Cars = () => {
                         <p className="text-primary font-bold mt-2">{car.price.toLocaleString()} {car.currency}</p>
                         
                         <div className="flex items-center gap-2 mt-4">
-                          <Button variant="outline" size="sm" className="flex-1">
-                            <Eye className="w-4 h-4 mr-2" />
-                            View Details
+                          <Button variant="outline" size="sm" className="flex-1" asChild>
+                            <Link to={`/car/${car.id}`} className="flex items-center justify-center gap-2">
+                              <Eye className="w-4 h-4 mr-2" />
+                              View Details
+                            </Link>
                           </Button>
                         </div>
                       </CardContent>
-                    </div>
+                    </Link>
                   </Card>
                 ))}
               </div>
@@ -485,7 +358,6 @@ const Cars = () => {
           </div>
         </div>
 
-        {/* Car Details Modal */}
         <Dialog open={!!selectedCar} onOpenChange={() => setSelectedCar(null)}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
@@ -541,19 +413,19 @@ const Cars = () => {
 
                 <div className="flex gap-4 pt-4">
                   <Button className="flex-1" asChild>
-                    <a href="tel:+250796684401" className="flex items-center justify-center gap-2">
+                    <a href={`tel:${selectedCar.contact_phone}`} className="flex items-center justify-center gap-2">
                       <Phone className="w-4 h-4" />
                       Call Now
                     </a>
                   </Button>
                   <Button variant="secondary" className="flex-1" asChild>
-                    <a href="https://wa.me/250796684401" className="flex items-center justify-center gap-2">
+                    <a href={`https://wa.me/${selectedCar.contact_whatsapp}`} className="flex items-center justify-center gap-2">
                       <MessageCircle className="w-4 h-4" />
                       WhatsApp
                     </a>
                   </Button>
-                  <Button variant="outline">
-                    Full Details
+                  <Button variant="outline" asChild>
+                    <Link to={`/car/${selectedCar.id}`}>Full Details</Link>
                   </Button>
                 </div>
               </div>
