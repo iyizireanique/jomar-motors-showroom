@@ -27,7 +27,7 @@ const Header = () => {
             />
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold text-primary">JOMAR MOTORS RWANDA</h1>
-              <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA ZAKOZE RYIZEWE</p>
+              <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA  RYIZEWE</p>
             </div>
           </Link>
 
