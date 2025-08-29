@@ -28,7 +28,7 @@ const Index = () => {
   );
 };
 
-// export default Index;
+export default Index;
 // const Index = () => {
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white flex-col">
