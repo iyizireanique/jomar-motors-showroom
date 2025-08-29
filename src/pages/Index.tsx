@@ -21,7 +21,7 @@ const Index = () => {
       
       
       <ServicesSection />
-      <ContactStrip id="contact" />clear
+      <ContactStrip id="contact" />
 
       <Footer />
     </div>
