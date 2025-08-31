@@ -52,10 +52,10 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=sale">Buy </Link>
+                  <Link to="/cars?filter=sale">For Sale</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=rent">Rental </Link>
+                  <Link to="/cars?filter=rent"> For Rental </Link>
                 </DropdownMenuItem>
   
                 <DropdownMenuItem asChild>
@@ -115,10 +115,10 @@ const Header = () => {
                 <p className="text-sm font-medium text-foreground mb-2">Cars</p>
                 <div className="space-y-1 ml-4">
                   <Link to="/cars?filter=sale" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    Buy Cars
+                    For Sale
                   </Link>
                   <Link to="/cars?filter=rent" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    Rental Cars
+                    For Rental 
                   </Link>
                   <Link to="/cars" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                     All Cars

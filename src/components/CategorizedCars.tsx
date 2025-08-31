@@ -113,7 +113,7 @@ const CategorizedCars = () => {
     return (
       <div className="mb-16">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">{title}</h2>
+          <h2 className="text-3xl font-bold text-primary mb-2">{title}</h2>
           {description && (
             <p className="text-muted-foreground max-w-2xl mx-auto">{description}</p>
           )}
@@ -157,7 +157,7 @@ const CategorizedCars = () => {
       <div className="container mx-auto px-4">
         
         <CategorySection 
-          title="HOT DEALS"
+          title="HOT DEALS FOR SALE"
           description="Professionally inspected and hot deal vehicles."
           cars={hotDeals}
         />
@@ -168,11 +168,11 @@ const CategorizedCars = () => {
           cars={certifiedCars}
         />
 
-        <CategorySection 
+        {/* <CategorySection 
           title="USED CARS FOR SALE"
           description="Quality pre-owned vehicles ready for new owners"
           cars={usedCarsForSale}
-        />
+        /> */}
         
         <CategorySection
           title="Rental Cars"

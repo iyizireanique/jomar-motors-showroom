@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Phone, MessageCircle, Eye, Car } from "lucide-react";
+import { Phone, MessageCircle, Eye, Car, Euro, HandCoins, Users, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Import localCars data
@@ -61,7 +61,7 @@ const RENTAL_PRICE_RANGES = [
 const Cars = () => {
   const [cars, setCars] = useState<LocalCar[]>([]);
   const [selectedCar, setSelectedCar] = useState<LocalCar | null>(null);
-  const [filter, setFilter] = useState<"sale" | "rent">("sale");
+  const [filter, setFilter] = useState<"sale" | "rent">("rent"); // Default to 'rent' as requested
   const [loading, setLoading] = useState(true);
   const [salePriceRanges, setSalePriceRanges] = useState<PriceRange[]>([]);
 
@@ -78,7 +78,7 @@ const Cars = () => {
 
   const calculateSalePriceRanges = (carsData: LocalCar[]) => {
     const rangeMap = new Map<string, { prices: number[], currency: string, count: number }>();
-    
+
     carsData
       .filter(car => car.type === "sale")
       .forEach(car => {
@@ -115,7 +115,7 @@ const Cars = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -129,8 +129,8 @@ const Cars = () => {
             <button
               onClick={() => setFilter("sale")}
               className={`px-6 py-2 rounded-md transition-all ${
-                filter === "sale" 
-                  ? "bg-primary text-primary-foreground" 
+                filter === "sale"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -139,8 +139,8 @@ const Cars = () => {
             <button
               onClick={() => setFilter("rent")}
               className={`px-6 py-2 rounded-md transition-all ${
-                filter === "rent" 
-                  ? "bg-primary text-primary-foreground" 
+                filter === "rent"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -197,14 +197,66 @@ const Cars = () => {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <Separator orientation="vertical" className="h-auto" />
             </>
           )}
-          
+
           <div className={`${filter === "rent" ? "flex-1" : ""}`}>
-            {filter === "rent" && !loading && (
+            {filter === "rent" && (
               <>
+                {/* Blog Content Section with improved formatting */}
+                <div className="mb-8">
+                  <Card className="bg-card border-border p-6">
+                    <h2 className="text-3xl font-bold text-white mb-4 text-center md:text-left">
+                      Long-Term & Short-Term Car Rental in Rwanda
+                    </h2>
+                    <p className="text-gray-300 mb-6">
+                      Planning an extended stay in Rwanda? Our **long-term and short-term car rental** options offer the perfect solution for business trips, volunteering, or extended holidays. With a diverse fleet and flexible terms, you can experience Rwanda with complete freedom and convenience.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="flex items-start gap-3">
+                            <HandCoins className="w-6 h-6 text-primary mt-1" />
+                            <div>
+                                <h3 className="text-xl font-semibold text-white mb-2">Cost Savings</h3>
+                                <p className="text-gray-300">Save **up to 40%** compared to short-term rentals, making your extended stay more budget-friendly.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Users className="w-6 h-6 text-primary mt-1" />
+                            <div>
+                                <h3 className="text-xl font-semibold text-white mb-2">Comfort & Privacy</h3>
+                                <p className="text-gray-300">Enjoy personal space and freedom with your own vehicle, perfect for families or solo travelers.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Settings className="w-6 h-6 text-primary mt-1" />
+                            <div>
+                                <h3 className="text-xl font-semibold text-white mb-2">Flexibility</h3>
+                                <p className="text-gray-300">Travel anywhere, anytime without depending on public transport. Our long-term packages start from a few weeks to yearly agreements.</p>
+                            </div>
+                        </div>
+                         <div className="flex items-start gap-3">
+                            <Car className="w-6 h-6 text-primary mt-1" />
+                            <div>
+                                <h3 className="text-xl font-semibold text-white mb-2">Vehicle Variety</h3>
+                                <p className="text-gray-300">Choose from a wide range of vehicles, from rugged 4x4s to comfortable luxury sedans.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <Separator className="my-6" />
+                    <h3 className="text-2xl font-semibold text-white mb-3">Vehicle Options</h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 list-disc list-inside">
+                      <li><strong className="text-white">4×4 Station Wagons:</strong> Toyota Prado, Land Cruiser (ideal for national parks)</li>
+                      <li><strong className="text-white">SUVs:</strong> Toyota RAV4, KIA Sorento, Hyundai Santafe... (perfect for families)</li>
+                      <li><strong className="text-white">Sedans:</strong> Toyota Corolla, Toyota Prius, KIA K5, Sonata (best for business/city use)</li>
+                      <li><strong className="text-white">Luxury Cars:</strong> BMW, Mercedes Benz (VIP transport)</li>
+                      <li><strong className="text-white">Minivans & Buses:</strong> Toyota Hiace, Grand Starex, Coasters (7-30 passengers)</li>
+                    </ul>
+                  </Card>
+                </div>
+
+                {/* The rest of the rental content */}
                 <div className="mb-8">
                   <Card className="bg-card border-border">
                     <CardHeader>
@@ -229,47 +281,45 @@ const Cars = () => {
                     </CardContent>
                   </Card>
                 </div>
+{/* 
+                <div className="mb-8">
+                  <Card className="bg-card border-border">
+                    <CardHeader>
+                      <CardTitle className="text-xl text-white">Popular Rental Cars</CardTitle>
+                      <p className="text-muted-foreground">Quick overview of our most popular rental vehicles</p>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {popularRentalCars.map((car) => (
+                          <div key={car.id} className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer group">
+                            <Link to={`/car/${car.id}`}>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <Car className="w-4 h-4 text-primary" />
+                                  <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
+                                    {car.brand} {car.model}
+                                  </h4>
+                                </div>
+                                <Badge variant="secondary" className="text-xs">
+                                  Available
+                                </Badge>
+                              </div>
+                              <div className="text-primary font-bold text-sm">
+                                {car.price.toLocaleString()} {car.currency}/day
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-1">
+                                Starting from
+                              </div>
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div> */}
               </>
             )}
 
-            {filter === "rent" && !loading && (
-              <div className="mb-8">
-                <Card className="bg-card border-border">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-white">Popular Rental Cars</CardTitle>
-                    <p className="text-muted-foreground">Quick overview of our most popular rental vehicles</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {popularRentalCars.map((car) => (
-                        <div key={car.id} className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                          <Link to={`/car/${car.id}`}>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <Car className="w-4 h-4 text-primary" />
-                                <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
-                                  {car.brand} {car.model}
-                                </h4>
-                              </div>
-                              <Badge variant="secondary" className="text-xs">
-                                Available
-                              </Badge>
-                            </div>
-                            <div className="text-primary font-bold text-sm">
-                              {car.price.toLocaleString()} {car.currency}/day
-                            </div>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              Starting from
-                            </div>
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-            
             {filter === "sale" && !loading && (
               <div className="mb-8">
                 <Card className="bg-card border-border">
@@ -316,7 +366,7 @@ const Cars = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCars.map((car) => (
                   <Card key={car.id} className="bg-card border-border hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    <Link to={`/car/${car.id}`}> 
+                    <Link to={`/car/${car.id}`}>
                       <div className="aspect-video overflow-hidden rounded-t-lg">
                         <img
                           src={car.image_url || "/placeholder.svg"}
