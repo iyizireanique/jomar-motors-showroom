@@ -28,16 +28,15 @@
 //   );
 // };
 
-// export default Index;
-// const Index = () => {
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white flex-col">
-//       <h1 className="text-4xl font-bold mb-4">🚧 Site Under Maintenance 🚧</h1>
-//       <p className="text-lg text-gray-300">
-//         We're currently working on some updates. Please check back soon!
-//       </p>
-//     </div>
-//   );
-// };
+export default Index;
+const Index = () => {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white flex-col">
+      <h1 className="text-4xl font-bold mb-4">.</h1>
+      <p className="text-lg text-gray-300">
+      </p>
+    </div>
+  );
+};
 
-// export default Index;
+export default Index;
