@@ -2,16 +2,24 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Menu, X, Phone, MessageCircle, ChevronDown, Info } from "lucide-react";
+import { Menu, X, Phone, MessageCircle, ChevronDown, Info, Globe } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AboutModal } from "@/components/AboutModal";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Contact", href: "/contact" },
+    { name: t('home'), href: "/" },
+    { name: t('contact'), href: "/contact" },
+  ];
+
+  const languages: { code: Language; name: string; flag: string }[] = [
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷' }
   ];
 
   return (
@@ -48,18 +56,17 @@ const Header = () => {
             {/* Cars Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-1 text-foreground hover:text-primary transition-colors duration-300">
-                Cars <ChevronDown className="w-4 h-4" />
+                {t('cars')} <ChevronDown className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=sale">For Sale</Link>
+                  <Link to="/cars?filter=sale">{t('forSale')}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/cars?filter=rent"> For Rental </Link>
+                  <Link to="/cars?filter=rent">{t('forRental')}</Link>
                 </DropdownMenuItem>
-  
                 <DropdownMenuItem asChild>
-                  <Link to="/buying-guide">Buying Consultancy</Link>
+                  <Link to="/buying-guide">{t('buyingConsultancy')}</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -67,17 +74,39 @@ const Header = () => {
 
           {/* Contact Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Language Switcher */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Globe className="w-4 h-4" />
+                  {languages.find(l => l.code === language)?.flag}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {languages.map((lang) => (
+                  <DropdownMenuItem 
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={`cursor-pointer ${language === lang.code ? 'bg-primary text-primary-foreground' : ''}`}
+                  >
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
-              <a href="tel:+250788239593" className="flex items-center gap-2">
+              <a href="tel:+250796684401" className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                Call
+                {t('call')}
               </a>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <a href="https://wa.me/250788239593" className="flex items-center gap-2">
+              <a href="https://wa.me/250796684401" className="flex items-center gap-2">
                 <MessageCircle className="w-4 h-4" />
-                WhatsApp
+                {t('whatsapp')}
               </a>
             </Button>
           </div>
@@ -112,20 +141,41 @@ const Header = () => {
               
               {/* Mobile Cars Menu */}
               <div className="px-4 py-2">
-                <p className="text-sm font-medium text-foreground mb-2">Cars</p>
+                <p className="text-sm font-medium text-foreground mb-2">{t('cars')}</p>
                 <div className="space-y-1 ml-4">
                   <Link to="/cars?filter=sale" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    For Sale
+                    {t('forSale')}
                   </Link>
                   <Link to="/cars?filter=rent" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    For Rental 
-                  </Link>
-                  <Link to="/cars" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    All Cars
+                    {t('forRental')}
                   </Link>
                   <Link to="/buying-guide" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                    Buying Consultancy
+                    {t('buyingConsultancy')}
                   </Link>
+                </div>
+              </div>
+              
+              {/* Mobile Language Switcher */}
+              <div className="px-4 py-2">
+                <p className="text-sm font-medium text-foreground mb-2">Language</p>
+                <div className="space-y-1 ml-4">
+                  {languages.map((lang) => (
+                    <button 
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setIsMenuOpen(false);
+                      }}
+                      className={`block py-1 text-left w-full ${
+                        language === lang.code 
+                          ? 'text-primary font-medium' 
+                          : 'text-muted-foreground hover:text-primary'
+                      }`}
+                    >
+                      <span className="mr-2">{lang.flag}</span>
+                      {lang.name}
+                    </button>
+                  ))}
                 </div>
               </div>
               
@@ -136,15 +186,15 @@ const Header = () => {
               
               <div className="px-4 py-2 space-y-2">
                 <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                  <a href="tel:+250788239593" className="flex items-center gap-2">
+                  <a href="tel:+250796684401" className="flex items-center gap-2">
                     <Phone className="w-4 h-4" />
-                    Call Now
+                    {t('call')}
                   </a>
                 </Button>
                 <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                  <a href="https://wa.me/250788239593" className="flex items-center gap-2">
+                  <a href="https://wa.me/250796684401" className="flex items-center gap-2">
                     <MessageCircle className="w-4 h-4" />
-                    WhatsApp
+                    {t('whatsapp')}
                   </a>
                 </Button>
               </div>

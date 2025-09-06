@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Phone, MessageCircle, Eye, Car, Euro, HandCoins, Users, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import localCars data
 import { localCars } from "@/pages/localCars";
@@ -64,6 +65,7 @@ const Cars = () => {
   const [filter, setFilter] = useState<"sale" | "rent">("rent"); // Default to 'rent' as requested
   const [loading, setLoading] = useState(true);
   const [salePriceRanges, setSalePriceRanges] = useState<PriceRange[]>([]);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setCars(localCars as unknown as LocalCar[]);
@@ -119,9 +121,9 @@ const Cars = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            OUR <span className="text-transparent bg-gradient-gold bg-clip-text">VEHICLES</span>
+            {t('ourVehicles')}
           </h1>
-          <p className="text-gray-300 text-lg">Browse our collection of quality vehicles</p>
+          <p className="text-gray-300 text-lg">{t('browseCollection')}</p>
         </div>
 
         <div className="flex justify-center mb-8">
@@ -134,7 +136,7 @@ const Cars = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              For Sale
+              {t('forSale')}
             </button>
             <button
               onClick={() => setFilter("rent")}
@@ -144,7 +146,7 @@ const Cars = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              For Rent
+              {t('forRental')}
             </button>
           </div>
         </div>
@@ -155,13 +157,13 @@ const Cars = () => {
             <>
               {/* Left Sidebar for Sale Price Ranges */}
               <div className="w-80 space-y-4">
-                <Card className="bg-card border-border">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-white flex items-center gap-2">
-                      <Car className="w-5 h-5" />
-                      Sale Price Ranges
-                    </CardTitle>
-                  </CardHeader>
+                  <Card className="bg-card border-border">
+                    <CardHeader>
+                      <CardTitle className="text-xl text-white flex items-center gap-2">
+                        <Car className="w-5 h-5" />
+                        Sale Price Ranges
+                      </CardTitle>
+                    </CardHeader>
                   <CardContent className="space-y-3">
                     {loading ? (
                       <div className="text-center py-4">
@@ -209,43 +211,43 @@ const Cars = () => {
                 <div className="mb-8">
                   <Card className="bg-card border-border p-6">
                     <h2 className="text-3xl font-bold text-white mb-4 text-center md:text-left">
-                      Long-Term & Short-Term Car Rental in Rwanda
+                      {t('longTermRental')}
                     </h2>
                     <p className="text-gray-300 mb-6">
-                      Planning an extended stay in Rwanda? Our **long-term and short-term car rental** options offer the perfect solution for business trips, volunteering, or extended holidays. With a diverse fleet and flexible terms, you can experience Rwanda with complete freedom and convenience.
+                      {t('rentalDescription')}
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="flex items-start gap-3">
                             <HandCoins className="w-6 h-6 text-primary mt-1" />
                             <div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Cost Savings</h3>
-                                <p className="text-gray-300">Save **up to 40%** compared to short-term rentals, making your extended stay more budget-friendly.</p>
+                                <h3 className="text-xl font-semibold text-white mb-2">{t('costSavings')}</h3>
+                                <p className="text-gray-300">{t('costSavingsDesc')}</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
                             <Users className="w-6 h-6 text-primary mt-1" />
                             <div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Comfort & Privacy</h3>
-                                <p className="text-gray-300">Enjoy personal space and freedom with your own vehicle, perfect for families or solo travelers.</p>
+                                <h3 className="text-xl font-semibold text-white mb-2">{t('comfortPrivacy')}</h3>
+                                <p className="text-gray-300">{t('comfortPrivacyDesc')}</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
                             <Settings className="w-6 h-6 text-primary mt-1" />
                             <div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Flexibility</h3>
-                                <p className="text-gray-300">Travel anywhere, anytime without depending on public transport. Our long-term packages start from a few weeks to yearly agreements.</p>
+                                <h3 className="text-xl font-semibold text-white mb-2">{t('flexibility')}</h3>
+                                <p className="text-gray-300">{t('flexibilityDesc')}</p>
                             </div>
                         </div>
                          <div className="flex items-start gap-3">
                             <Car className="w-6 h-6 text-primary mt-1" />
                             <div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Vehicle Variety</h3>
-                                <p className="text-gray-300">Choose from a wide range of vehicles, from rugged 4x4s to comfortable luxury sedans.</p>
+                                <h3 className="text-xl font-semibold text-white mb-2">{t('vehicleVariety')}</h3>
+                                <p className="text-gray-300">{t('vehicleVarietyDesc')}</p>
                             </div>
                         </div>
                     </div>
                     <Separator className="my-6" />
-                    <h3 className="text-2xl font-semibold text-white mb-3">Vehicle Options</h3>
+                    <h3 className="text-2xl font-semibold text-white mb-3">{t('vehicleOptions')}</h3>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 list-disc list-inside">
                       <li><strong className="text-white">4×4 Station Wagons:</strong> Toyota Prado, Land Cruiser (ideal for national parks)</li>
                       <li><strong className="text-white">SUVs:</strong> Toyota RAV4, KIA Sorento, Hyundai Santafe... (perfect for families)</li>
@@ -260,9 +262,9 @@ const Cars = () => {
                 <div className="mb-8">
                   <Card className="bg-card border-border">
                     <CardHeader>
-                      <CardTitle className="text-xl text-white">Rental Price Ranges</CardTitle>
+                      <CardTitle className="text-xl text-white">{t('rentalPriceRanges')}</CardTitle>
                       <p className="text-muted-foreground">
-                        Our full range of rental vehicle types and their cost per day.
+                        {t('fullRangeInfo')}
                       </p>
                     </CardHeader>
                     <CardContent>

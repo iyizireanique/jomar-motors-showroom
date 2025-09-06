@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Plus, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import AdminDatabaseReset from "@/components/AdminDatabaseReset";
 
 interface Car {
   id: string;
@@ -42,6 +43,7 @@ const Admin = () => {
   const [isAddingCar, setIsAddingCar] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const [newCar, setNewCar] = useState({
     title: "",
@@ -204,6 +206,47 @@ const Admin = () => {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `car-images/${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from('car-images')
+        .upload(filePath, file);
+
+      if (error) {
+        throw error;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('car-images')
+        .getPublicUrl(filePath);
+
+      setNewCar({ ...newCar, image_url: publicUrl });
+      
+      toast({
+        title: "Image Uploaded",
+        description: "Car image has been uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Upload Error",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleDeleteCar = async (carId: string) => {
     try {
       const { error } = await supabase
@@ -293,6 +336,9 @@ const Admin = () => {
             Add New Car
           </Button>
         </div>
+
+        {/* Database Management */}
+        <AdminDatabaseReset />
 
         {/* Add/Edit Car Form */}
         {(isAddingCar || editingCar) && (
@@ -417,13 +463,25 @@ const Admin = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <Input
-                    id="image_url"
-                    value={newCar.image_url}
-                    onChange={(e) => setNewCar({...newCar, image_url: e.target.value})}
-                    placeholder="https://example.com/car-image.jpg"
-                  />
+                  <Label htmlFor="image_upload">Car Image</Label>
+                  <div className="space-y-2">
+                    <Input
+                      id="image_upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="cursor-pointer"
+                    />
+                    {newCar.image_url && (
+                      <div className="mt-2">
+                        <img 
+                          src={newCar.image_url} 
+                          alt="Car preview" 
+                          className="w-32 h-24 object-cover rounded-md border"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="featured">Featured Car</Label>
@@ -456,8 +514,8 @@ const Admin = () => {
                   />
                 </div>
                 <div className="md:col-span-2 flex gap-4">
-                  <Button type="submit" disabled={loading}>
-                    {loading ? "Adding..." : isAddingCar ? "Add Car" : "Update Car"}
+                  <Button type="submit" disabled={loading || uploading}>
+                    {uploading ? "Uploading..." : loading ? "Saving..." : isAddingCar ? "Add Car" : "Update Car"}
                   </Button>
                   <Button 
                     type="button" 
