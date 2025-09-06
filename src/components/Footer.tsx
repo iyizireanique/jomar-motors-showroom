@@ -109,6 +109,14 @@ const Footer = () => {
           <p className="text-gray-400 text-sm">
             © 2025 JOMAR MOTORS RWANDA. All rights reserved. | Established 2019 | Part of JOMAR BUSINESS GROUP
           </p>
+          <div className="mt-2">
+            <Link 
+              to="/admin" 
+              className="text-xs text-muted-foreground hover:text-primary transition-colors opacity-50 hover:opacity-100"
+            >
+              Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

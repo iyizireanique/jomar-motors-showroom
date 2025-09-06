@@ -143,12 +143,22 @@ const Admin = () => {
         currency: 'RWF'
       };
 
-      const { error } = await supabase
-        .from('cars')
-        .insert([carData]);
+      let result;
+      if (editingCar) {
+        // Update existing car
+        result = await supabase
+          .from('cars')
+          .update(carData)
+          .eq('id', editingCar.id);
+      } else {
+        // Insert new car
+        result = await supabase
+          .from('cars')
+          .insert([carData]);
+      }
 
-      if (error) {
-        throw error;
+      if (result.error) {
+        throw result.error;
       }
 
       // Reset form
@@ -173,13 +183,14 @@ const Admin = () => {
         featured: false
       });
       setIsAddingCar(false);
+      setEditingCar(null);
       
       // Refresh cars list
       await fetchCars();
       
       toast({
-        title: "Car Added",
-        description: `${carData.brand} ${carData.model} has been added successfully`,
+        title: editingCar ? "Car Updated" : "Car Added",
+        description: `${carData.brand} ${carData.model} has been ${editingCar ? 'updated' : 'added'} successfully`,
       });
     } catch (error) {
       console.error('Error adding car:', error);
@@ -454,6 +465,26 @@ const Admin = () => {
                     onClick={() => {
                       setIsAddingCar(false);
                       setEditingCar(null);
+                      setNewCar({
+                        title: "",
+                        brand: "",
+                        model: "",
+                        year: "",
+                        mileage: "",
+                        seats: "",
+                        transmission: "",
+                        fuel_type: "",
+                        type: "sale",
+                        location: "",
+                        price: "",
+                        description: "",
+                        features: "",
+                        image_url: "",
+                        contact_phone: "+250796684401",
+                        contact_whatsapp: "+250796684401",
+                        contact_email: "info@jomarmotors.com",
+                        featured: false
+                      });
                     }}
                   >
                     Cancel
@@ -493,7 +524,29 @@ const Admin = () => {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => setEditingCar(car)}
+                    onClick={() => {
+                      setEditingCar(car);
+                      setNewCar({
+                        title: car.title,
+                        brand: car.brand,
+                        model: car.model,
+                        year: car.year.toString(),
+                        mileage: car.mileage?.toString() || "",
+                        seats: car.seats.toString(),
+                        transmission: car.transmission,
+                        fuel_type: car.fuel_type,
+                        type: car.type,
+                        location: car.location,
+                        price: car.price.toString(),
+                        description: car.description || "",
+                        features: car.features?.join(", ") || "",
+                        image_url: car.image_url || "",
+                        contact_phone: car.contact_phone || "+250796684401",
+                        contact_whatsapp: car.contact_whatsapp || "+250796684401",
+                        contact_email: car.contact_email || "info@jomarmotors.com",
+                        featured: car.featured
+                      });
+                    }}
                   >
                     <Edit className="w-4 h-4" />
                   </Button>
