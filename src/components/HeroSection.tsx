@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Car, Shield, Award } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 import carKcc from "@/assets/car-kcc-1.jpg";
 import carArena from "@/assets/car-arena-1.jpg";
 import carKimisagara from "@/assets/car-kimisagara-1.jpg";
@@ -19,6 +20,7 @@ import aaa2 from "/src/assets/aaa2.jpeg";
 import aaa3 from "/src/assets/aaa3.jpeg";
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { t } = useLanguage();
   const backgroundImages = [
     carKcc, carArena, carKimisagara, aaa1, carNyabugogo,aaa, carCityTower,
     carUr,aaa3, carRebero, carGatsata,  aaa2,carKacyiru, carGisozi, 
@@ -84,7 +86,7 @@ const HeroSection = () => {
                   animate={{ x: '0%', opacity: 1 }}
                   transition={{ duration: 1.4, delay: 0.1, ease: "easeOut" }}
                 >
-                  JOMAR MOTORS RWANDA
+                  {t('heroTitle')}
                 </motion.span>
                 <motion.span
                   className="block text-white mt-2"
@@ -92,7 +94,7 @@ const HeroSection = () => {
                   animate={{ x: '0%', opacity: 1 }}
                   transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
                 >
-                  Gura, Gurisha, Kodesha Imodoka
+                  {t('heroSubtitle')}
                 </motion.span>
               </motion.h1>
             </div>
@@ -104,9 +106,7 @@ const HeroSection = () => {
               animate={{ x: '0%', opacity: 1 }}
               transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
             >
-              Your premier automotive destination in Rwanda. From premium used cars to 
-              professional buying consultancy, we provide comprehensive automotive solutions 
-              with trusted expertise and quality guarantee.
+              {t('heroDescription')}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -119,21 +119,21 @@ const HeroSection = () => {
               <Button variant="premium" size="xl" asChild className="group">
                 <Link to="/cars" className="flex items-center gap-2">
                   <Car className="w-5 h-5" />
-                  View Cars
+                  {t('viewCars')}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button variant="luxury" size="xl" asChild className="group">
                 <Link to="/cars?filter=rent" className="flex items-center gap-2">
                   <Shield className="w-5 h-5" />
-                  Rent a Car
+                  {t('rentCar')}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button variant="outline" size="xl" asChild className="group border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 <Link to="/buying-guide" className="flex items-center gap-2">
                   <Award className="w-5 h-5" />
-                  Learn More About Used Car Buying
+                  {t('learnMore')}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
@@ -143,15 +143,15 @@ const HeroSection = () => {
             <div className="flex flex-wrap items-center gap-8 pt-8">
               <div className="flex items-center gap-2 text-primary">
                 <Award className="w-5 h-5" />
-                <span className="text-sm font-medium">Since 2019</span>
+                <span className="text-sm font-medium">{t('since2019')}</span>
               </div>
               <div className="flex items-center gap-2 text-primary">
                 <Shield className="w-5 h-5" />
-                <span className="text-sm font-medium">Trusted Partner</span>
+                <span className="text-sm font-medium">{t('trustedPartner')}</span>
               </div>
               <div className="flex items-center gap-2 text-primary">
                 <Car className="w-5 h-5" />
-                <span className="text-sm font-medium">Quality Guaranteed</span>
+                <span className="text-sm font-medium">{t('qualityGuaranteed')}</span>
               </div>
             </div>
           </div>

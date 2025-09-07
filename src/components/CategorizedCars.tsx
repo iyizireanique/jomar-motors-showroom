@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-
-// Import localCars data
-import { localCars } from "@/pages/localCars";
+import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: string;
@@ -38,12 +37,34 @@ const CategorizedCars = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
-  // UseEffect hook to load only localCars
+  // UseEffect hook to load cars from database
   useEffect(() => {
-    setAllCars(localCars);
-    setLoading(false);
+    fetchCars();
   }, []);
+
+  const fetchCars = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .eq('available', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching cars:', error);
+        setAllCars([]);
+      } else {
+        setAllCars(data || []);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setAllCars([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   // Categorize cars with a clear hierarchy to avoid duplication
   const hotDeals = allCars.filter(car => 
@@ -145,7 +166,7 @@ const CategorizedCars = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <p className="text-muted-foreground">Loading cars...</p>
+            <p className="text-muted-foreground">{t('loadingCars')}</p>
           </div>
         </div>
       </section>
@@ -157,32 +178,32 @@ const CategorizedCars = () => {
       <div className="container mx-auto px-4">
         
         <CategorySection 
-          title="HOT DEALS FOR SALE"
-          description="Professionally inspected and hot deal vehicles."
+          title={t('hotDealsForSale')}
+          description={t('hotDealsDesc')}
           cars={hotDeals}
         />
         
         <CategorySection 
-          title="Certified & Inspected Cars"
-          description="Imodoka zigenzuwe & zifite ibyangombwa"
+          title={t('certifiedInspected')}
+          description={t('certifiedInspectedDesc')}
           cars={certifiedCars}
         />
 
         {/* <CategorySection 
-          title="USED CARS FOR SALE"
-          description="Quality pre-owned vehicles ready for new owners"
+          title={t('usedCarsForSale')}
+          description={t('usedCarsDesc')}
           cars={usedCarsForSale}
         /> */}
         
         <CategorySection
-          title="Rental Cars"
-          description="Vehicles available for short and long-term rental"
+          title={t('rentalCars')}
+          description={t('rentalCarsDesc')}
           cars={rentalCars}
         />
         
         <div className="text-center mt-12">
           <Button variant="outline" size="lg" asChild>
-            <Link to="/cars">View All Cars</Link>
+            <Link to="/cars">{t('viewAllCars')}</Link>
           </Button>
         </div>
 
@@ -208,38 +229,38 @@ const CategorizedCars = () => {
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-foreground">Year:</span>
+                    <span className="font-medium text-foreground">{t('year')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.year}</span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Mileage:</span>
+                    <span className="font-medium text-foreground">{t('mileage')}:</span>
                     <span className="ml-2 text-muted-foreground">
                       {selectedCar.mileage ? `${selectedCar.mileage.toLocaleString()} km` : 'N/A'}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Price:</span>
+                    <span className="font-medium text-foreground">{t('price')}:</span>
                     <span className="ml-2 text-primary font-bold">
                       {formatPrice(selectedCar.price, selectedCar.currency)}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Transmission:</span>
+                    <span className="font-medium text-foreground">{t('transmission')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.transmission}</span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Fuel:</span>
+                    <span className="font-medium text-foreground">{t('fuel')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.fuel_type}</span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Seats:</span>
+                    <span className="font-medium text-foreground">{t('seats')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.seats}</span>
                   </div>
                 </div>
 
                 {selectedCar.features && selectedCar.features.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-foreground mb-2">Features:</h4>
+                    <h4 className="font-medium text-foreground mb-2">{t('features')}</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedCar.features.map((feature, index) => (
                         <span 
@@ -262,7 +283,7 @@ const CategorizedCars = () => {
                       className="flex items-center gap-2"
                     >
                       <Phone className="w-4 h-4" />
-                      Call
+                      {t('call')}
                     </a>
                   </Button>
                   <Button variant="outline" asChild>
@@ -273,13 +294,13 @@ const CategorizedCars = () => {
                       rel="noopener noreferrer"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      WhatsApp
+                      {t('whatsapp')}
                     </a>
                   </Button>
                   <Button variant="ghost" asChild>
                     <Link to={`/car/${selectedCar.id}`} className="flex items-center gap-2">
                       <ExternalLink className="w-4 h-4" />
-                      Full Details
+                      {t('fullDetails')}
                     </Link>
                   </Button>
                 </div>

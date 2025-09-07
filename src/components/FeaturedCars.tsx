@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase, type Car as CarType } from "@/lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: string;
@@ -35,6 +36,7 @@ const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchCars();
@@ -72,9 +74,9 @@ const FeaturedCars = () => {
     return (
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p className="text-muted-foreground">Loading cars...</p>
-          </div>
+        <div className="text-center">
+          <p className="text-muted-foreground">{t('loadingCars')}</p>
+        </div>
         </div>
       </section>
     );
@@ -84,16 +86,16 @@ const FeaturedCars = () => {
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">FEATURED CARS</h2>
-          <h4 className="text-2xl font-bold text-primary mb-4">HOT DEALS</h4>
+          <h2 className="text-3xl font-bold text-foreground mb-4">{t('featuredCars')}</h2>
+          <h4 className="text-2xl font-bold text-primary mb-4">{t('hotDeals')}</h4>
 
           <p className="text-muted-foreground max-w-2xl mx-auto">
-          Certified& Inspected Cars<span className="text-primary"> "Imodoka zigenzuwe &zifite ibyangombwa"</span>       </p>
+          {t('certifiedInspected')} <span className="text-primary">{t('certifiedInspectedDesc')}</span>       </p>
         </div>
 
         {cars.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">No featured cars available at the moment.</p>
+            <p className="text-muted-foreground">{t('noFeaturedCars')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -126,7 +128,7 @@ const FeaturedCars = () => {
                       ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
                       : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                   }`}>
-                    {car.type === 'sale' ? 'For Sale' : 'For Rent'}
+                    {car.type === 'sale' ? t('forSaleLabel') : t('forRentLabel')}
                   </span>
                 </div>
               </CardContent>
@@ -137,7 +139,7 @@ const FeaturedCars = () => {
 
         <div className="text-center mt-8">
           <Button variant="outline" asChild>
-            <Link to="/cars">View All Cars</Link>
+            <Link to="/cars">{t('viewAllCars')}</Link>
           </Button>
         </div>
 
@@ -162,40 +164,40 @@ const FeaturedCars = () => {
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-foreground">Year:</span>
+                    <span className="font-medium text-foreground">{t('year')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.year}</span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Mileage:</span>
+                    <span className="font-medium text-foreground">{t('mileage')}:</span>
                     <span className="ml-2 text-muted-foreground">
                       {selectedCar.mileage ? `${selectedCar.mileage.toLocaleString()} km` : 'N/A'}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Price:</span>
+                    <span className="font-medium text-foreground">{t('price')}:</span>
                     <span className="ml-2 text-primary font-bold">
-                      {selectedCar.price ? `${selectedCar.price.toLocaleString()} ${selectedCar.currency}` : 'Price on request'}
+                      {selectedCar.price ? `${selectedCar.price.toLocaleString()} ${selectedCar.currency}` : t('priceOnRequest')}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Status:</span>
+                    <span className="font-medium text-foreground">{t('status')}:</span>
                     <span className="ml-2 text-muted-foreground">
-                      {selectedCar.type === 'sale' ? 'For Sale' : 'For Rent'}
+                      {selectedCar.type === 'sale' ? t('forSaleLabel') : t('forRentLabel')}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Transmission:</span>
+                    <span className="font-medium text-foreground">{t('transmission')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.transmission}</span>
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Fuel:</span>
+                    <span className="font-medium text-foreground">{t('fuel')}:</span>
                     <span className="ml-2 text-muted-foreground">{selectedCar.fuel_type}</span>
                   </div>
                 </div>
 
                 {selectedCar.features && selectedCar.features.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-foreground mb-2">Features:</h4>
+                    <h4 className="font-medium text-foreground mb-2">{t('features')}</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedCar.features.map((feature, index) => (
                         <span 
@@ -218,7 +220,7 @@ const FeaturedCars = () => {
                       className="flex items-center gap-2"
                     >
                       <Phone className="w-4 h-4" />
-                      Call
+                      {t('call')}
                     </a>
                   </Button>
                   <Button variant="outline" asChild>
@@ -229,13 +231,13 @@ const FeaturedCars = () => {
                       rel="noopener noreferrer"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      WhatsApp
+                      {t('whatsapp')}
                     </a>
                   </Button>
                   <Button variant="ghost" asChild>
                     <Link to={`/car/${selectedCar.id}`} className="flex items-center gap-2">
                       <ExternalLink className="w-4 h-4" />
-                      Full Details
+                      {t('fullDetails')}
                     </Link>
                   </Button>
                 </div>

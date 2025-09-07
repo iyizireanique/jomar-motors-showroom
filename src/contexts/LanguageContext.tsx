@@ -21,8 +21,46 @@ const translations: Record<Language, Translation> = {
     whatsapp: 'WhatsApp',
     
     // Hero Section
-    heroTitle: 'Quality Cars, Trusted Service',
-    heroSubtitle: 'Find your perfect vehicle from our extensive collection of quality cars and reliable rental services in Rwanda',
+    heroTitle: 'JOMAR MOTORS RWANDA',
+    heroSubtitle: 'Buy, Sell, Rent Cars',
+    heroDescription: 'Your premier automotive destination in Rwanda. From premium used cars to professional buying consultancy, we provide comprehensive automotive solutions with trusted expertise and quality guarantee.',
+    viewCars: 'View Cars',
+    rentCar: 'Rent a Car',
+    learnMore: 'Learn More About Used Car Buying',
+    since2019: 'Since 2019',
+    trustedPartner: 'Trusted Partner',
+    qualityGuaranteed: 'Quality Guaranteed',
+    
+    // Featured Cars Section
+    featuredCars: 'FEATURED CARS',
+    hotDeals: 'HOT DEALS',
+    certifiedInspected: 'Certified & Inspected Cars',
+    certifiedInspectedDesc: '"Imodoka zigenzuwe &zifite ibyangombwa"',
+    loadingCars: 'Loading cars...',
+    noFeaturedCars: 'No featured cars available at the moment.',
+    viewAllCars: 'View All Cars',
+    forSaleLabel: 'For Sale',
+    forRentLabel: 'For Rent',
+    
+    // Car Details Modal
+    year: 'Year',
+    mileage: 'Mileage',
+    price: 'Price',
+    status: 'Status',
+    transmission: 'Transmission',
+    fuel: 'Fuel',
+    seats: 'Seats',
+    features: 'Features:',
+    fullDetails: 'Full Details',
+    priceOnRequest: 'Price on request',
+    
+    // Categorized Cars
+    hotDealsForSale: 'HOT DEALS FOR SALE',
+    hotDealsDesc: 'Professionally inspected and hot deal vehicles.',
+    usedCarsForSale: 'USED CARS FOR SALE',
+    usedCarsDesc: 'Quality pre-owned vehicles ready for new owners',
+    rentalCars: 'Rental Cars',
+    rentalCarsDesc: 'Vehicles available for short and long-term rental',
     
     // Cars Page
     ourVehicles: 'OUR VEHICLES',
@@ -58,8 +96,46 @@ const translations: Record<Language, Translation> = {
     whatsapp: 'WhatsApp',
     
     // Hero Section
-    heroTitle: 'Imodoka nziza, Serivise yizewe',
-    heroSubtitle: 'Shakisha imodoka ikwiriye muri rusange rwacu rwinshi rw\'imodoka nziza n\'amakodesho azizewe mu Rwanda',
+    heroTitle: 'JOMAR MOTORS RWANDA',
+    heroSubtitle: 'Gura, Gurisha, Kodesha Imodoka',
+    heroDescription: 'Ikigo cyacu gikomeye cy\'imodoka mu Rwanda. Kuva mu modoka za kimwe zizwi neza kugeza mu nama z\'ubushoferi, dutanga ibisubizo byose by\'imodoka hamwe n\'ubumenyi bwizerwemo n\'ubwizere.',
+    viewCars: 'Reba Imodoka',
+    rentCar: 'Kodesha Imodoka',
+    learnMore: 'Menya Byinshi ku Kugura Imodoka Zakoreshejwe',
+    since2019: 'Kuva 2019',
+    trustedPartner: 'Umunyangavu Wizewe',
+    qualityGuaranteed: 'Ubunyangamugayo Bwemejwe',
+    
+    // Featured Cars Section
+    featuredCars: 'IMODOKA ZIKOMEYE',
+    hotDeals: 'AMACURUZI ASHYUHA',
+    certifiedInspected: 'Imodoka Zigenzuwe & Zifite Ibyangombwa',
+    certifiedInspectedDesc: '"Imodoka zigenzuwe &zifite ibyangombwa"',
+    loadingCars: 'Gupakurura imodoka...',
+    noFeaturedCars: 'Nta modoka zikomeye ziboneka ubu.',
+    viewAllCars: 'Reba Imodoka Zose',
+    forSaleLabel: 'Zo Kugura',
+    forRentLabel: 'Zo Gukodesha',
+    
+    // Car Details Modal
+    year: 'Umwaka',
+    mileage: 'Kilometero',
+    price: 'Igiciro',
+    status: 'Uko bimeze',
+    transmission: 'Transmission',
+    fuel: 'Lisansi',
+    seats: 'Intebe',
+    features: 'Ibiranga:',
+    fullDetails: 'Amakuru Yose',
+    priceOnRequest: 'Igiciro ku gusaba',
+    
+    // Categorized Cars
+    hotDealsForSale: 'AMACURUZI ASHYUHA YO KUGURA',
+    hotDealsDesc: 'Imodoka zagenzuwe neza kandi zifite amacuruzi ashyuha.',
+    usedCarsForSale: 'IMODOKA ZAKORESHEJWE ZO KUGURA',
+    usedCarsDesc: 'Imodoka nziza zakoreshejwe ziteguye abanyereza bashya',
+    rentalCars: 'Imodoka zo Gukodesha',
+    rentalCarsDesc: 'Imodoka ziboneka zo gukodesha mu gihe kigufi no kirekire',
     
     // Cars Page
     ourVehicles: 'IMODOKA ZACU',
@@ -95,8 +171,46 @@ const translations: Record<Language, Translation> = {
     whatsapp: 'WhatsApp',
     
     // Hero Section
-    heroTitle: 'Voitures de qualité, service de confiance',
-    heroSubtitle: 'Trouvez votre véhicule parfait dans notre vaste collection de voitures de qualité et services de location fiables au Rwanda',
+    heroTitle: 'JOMAR MOTORS RWANDA',
+    heroSubtitle: 'Acheter, Vendre, Louer des Voitures',
+    heroDescription: 'Votre destination automobile de premier plan au Rwanda. Des voitures d\'occasion premium au conseil d\'achat professionnel, nous fournissons des solutions automobiles complètes avec une expertise de confiance et une garantie de qualité.',
+    viewCars: 'Voir les Voitures',
+    rentCar: 'Louer une Voiture',
+    learnMore: 'En Savoir Plus sur l\'Achat de Voitures d\'Occasion',
+    since2019: 'Depuis 2019',
+    trustedPartner: 'Partenaire de Confiance',
+    qualityGuaranteed: 'Qualité Garantie',
+    
+    // Featured Cars Section
+    featuredCars: 'VOITURES VEDETTES',
+    hotDeals: 'BONNES AFFAIRES',
+    certifiedInspected: 'Voitures Certifiées et Inspectées',
+    certifiedInspectedDesc: '"Voitures inspectées et certifiées"',
+    loadingCars: 'Chargement des voitures...',
+    noFeaturedCars: 'Aucune voiture vedette disponible pour le moment.',
+    viewAllCars: 'Voir Toutes les Voitures',
+    forSaleLabel: 'À Vendre',
+    forRentLabel: 'À Louer',
+    
+    // Car Details Modal
+    year: 'Année',
+    mileage: 'Kilométrage',
+    price: 'Prix',
+    status: 'Statut',
+    transmission: 'Transmission',
+    fuel: 'Carburant',
+    seats: 'Sièges',
+    features: 'Caractéristiques:',
+    fullDetails: 'Détails Complets',
+    priceOnRequest: 'Prix sur demande',
+    
+    // Categorized Cars
+    hotDealsForSale: 'BONNES AFFAIRES À VENDRE',
+    hotDealsDesc: 'Véhicules inspectés professionnellement et bonnes affaires.',
+    usedCarsForSale: 'VOITURES D\'OCCASION À VENDRE',
+    usedCarsDesc: 'Véhicules d\'occasion de qualité prêts pour de nouveaux propriétaires',
+    rentalCars: 'Voitures de Location',
+    rentalCarsDesc: 'Véhicules disponibles pour location court et long terme',
     
     // Cars Page
     ourVehicles: 'NOS VÉHICULES',
