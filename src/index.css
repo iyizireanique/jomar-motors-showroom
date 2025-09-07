@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* JOMAR MOTORS Design System - Gold & Black Automotive Theme */
+/* JOMAR MOTORS Design System - Light Mode with Gold Accents */
 
 @layer base {
   :root {
@@ -16,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    /* Gold primary theme */
+    /* Gold primary theme (unchanged) */
     --primary: 51 100% 50%;
     --primary-foreground: 0 0% 0%;
 
     /* Light secondary */
-    --secondary: 0 0% 90%;
+    --secondary: 0 0% 95%;
     --secondary-foreground: 0 0% 0%;
 
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 40%;
 
     --accent: 51 100% 50%;
     --accent-foreground: 0 0% 0%;
@@ -34,37 +34,30 @@
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 85%;
-    --input: 0 0% 98%;
+    --input: 0 0% 95%;
     --ring: 51 100% 50%;
 
-    /* Premium automotive gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(51 100% 50% / 0.1), hsl(0 0% 0% / 0.9));
+    /* Premium automotive gradients - light mode */
+    --gradient-hero: linear-gradient(135deg, hsl(51 100% 50% / 0.1), hsl(0 0% 100% / 0.9));
     --gradient-gold: linear-gradient(135deg, hsl(51 100% 50%), hsl(45 100% 45%));
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 0%), hsl(0 0% 5%));
+    --gradient-light: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
 
-    /* Luxury shadows */
+    /* Luxury shadows - adjusted for light mode */
     --shadow-gold: 0 10px 30px -5px hsl(51 100% 50% / 0.3);
-    --shadow-elegant: 0 20px 40px -10px hsl(0 0% 0% / 0.5);
+    --shadow-elegant: 0 20px 40px -10px hsl(0 0% 0% / 0.1);
 
     /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -117,8 +110,20 @@
     @apply bg-background text-foreground;
   }
 
-  /* Animated header background */
+  /* Animated header background - light mode */
   .animated-header {
+    background: linear-gradient(45deg, 
+      hsl(0 0% 100%), 
+      hsl(0 0% 98%), 
+      hsl(51 100% 50% / 0.1), 
+      hsl(0 0% 100%)
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+  }
+
+  /* Dark mode animated header */
+  .dark .animated-header {
     background: linear-gradient(45deg, 
       hsl(0 0% 0%), 
       hsl(0 0% 5%), 
@@ -133,5 +138,20 @@
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+  }
+}
+
+/* Additional light mode utilities */
+@layer utilities {
+  .text-gold {
+    color: hsl(51 100% 50%);
+  }
+  
+  .bg-gold {
+    background-color: hsl(51 100% 50%);
+  }
+  
+  .border-gold {
+    border-color: hsl(51 100% 50%);
   }
 }
