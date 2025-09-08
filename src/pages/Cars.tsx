@@ -9,11 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import { Phone, MessageCircle, Eye, Car, Euro, HandCoins, Users, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
-// Import localCars data
-import { localCars } from "@/pages/localCars";
-
-interface LocalCar {
+interface Car {
   id: string;
   title: string;
   brand: string;
@@ -60,16 +59,16 @@ const RENTAL_PRICE_RANGES = [
 ];
 
 const Cars = () => {
-  const [cars, setCars] = useState<LocalCar[]>([]);
-  const [selectedCar, setSelectedCar] = useState<LocalCar | null>(null);
+  const [cars, setCars] = useState<Car[]>([]);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [filter, setFilter] = useState<"sale" | "rent">("rent"); // Default to 'rent' as requested
   const [loading, setLoading] = useState(true);
   const [salePriceRanges, setSalePriceRanges] = useState<PriceRange[]>([]);
   const { t } = useLanguage();
+  const { toast } = useToast();
 
   useEffect(() => {
-    setCars(localCars as unknown as LocalCar[]);
-    setLoading(false);
+    fetchCars();
   }, []);
 
   useEffect(() => {
@@ -78,7 +77,37 @@ const Cars = () => {
     }
   }, [cars]);
 
-  const calculateSalePriceRanges = (carsData: LocalCar[]) => {
+  const fetchCars = async () => {
+    setLoading(true);
+    try {
+      console.log('Fetching cars from Supabase...');
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .eq('available', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Fetched cars:', data);
+      setCars(data || []);
+    } catch (error) {
+      console.error('Error fetching cars:', error);
+      toast({
+        title: "Connection Error", 
+        description: "Unable to load cars. Please check your connection.",
+        variant: "destructive",
+      });
+      setCars([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calculateSalePriceRanges = (carsData: Car[]) => {
     const rangeMap = new Map<string, { prices: number[], currency: string, count: number }>();
 
     carsData
@@ -107,10 +136,10 @@ const Cars = () => {
   };
 
   const filteredCars = cars.filter(car => car.type === filter);
-  const popularRentalCars = localCars.filter(car => car.type === 'rent' && car.featured);
-  const popularSaleCars = localCars.filter(car => car.type === 'sale' && car.featured);
+  const popularRentalCars = cars.filter(car => car.type === 'rent' && car.featured);
+  const popularSaleCars = cars.filter(car => car.type === 'sale' && car.featured);
 
-  const handleCarClick = (car: LocalCar) => {
+  const handleCarClick = (car: Car) => {
     setSelectedCar(car);
   };
 
@@ -120,10 +149,10 @@ const Cars = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-yellow mb-4">
             {t('ourVehicles')}
           </h1>
-          <p className="text-gray-300 text-lg">{t('browseCollection')}</p>
+          <p className="text-gray text-lg">{t('browseCollection')}</p>
         </div>
 
         <div className="flex justify-center mb-8">
@@ -159,7 +188,7 @@ const Cars = () => {
               <div className="w-80 space-y-4">
                   <Card className="bg-card border-border">
                     <CardHeader>
-                      <CardTitle className="text-xl text-white flex items-center gap-2">
+                      <CardTitle className="text-xl text-black flex items-center gap-2">
                         <Car className="w-5 h-5" />
                         Sale Price Ranges
                       </CardTitle>
@@ -210,12 +239,28 @@ const Cars = () => {
                 {/* Blog Content Section with improved formatting */}
                 <div className="mb-8">
                   <Card className="bg-card border-border p-6">
-                    <h2 className="text-3xl font-bold text-white mb-4 text-center md:text-left">
-                      {t('longTermRental')}
-                    </h2>
-                    <p className="text-gray-300 mb-6">
-                      {t('rentalDescription')}
-                    </p>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-6">
+                      <div>
+                        <h2 className="text-3xl font-bold text-white mb-4">
+                          {t('longTermRental')}
+                        </h2>
+                        <p className="text-gray-300 mb-4">
+                          {t('rentalDescription')}
+                        </p>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg">
+                        <img
+                          src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                          alt="Car rental in Rwanda - Modern vehicles available for long-term and short-term rental"
+                          className="w-full h-64  text-foreground lg:h-80 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                        <div className="absolute bottom-4 left-4 text-white">
+                          <p className="text-sm font-medium">Premium Car Rental Services</p>
+                          <p className="text-xs text-gray-200">Available across Rwanda</p>
+                        </div>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="flex items-start gap-3">
                             <HandCoins className="w-6 h-6 text-primary mt-1" />
@@ -283,42 +328,6 @@ const Cars = () => {
                     </CardContent>
                   </Card>
                 </div>
-{/* 
-                <div className="mb-8">
-                  <Card className="bg-card border-border">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-white">Popular Rental Cars</CardTitle>
-                      <p className="text-muted-foreground">Quick overview of our most popular rental vehicles</p>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {popularRentalCars.map((car) => (
-                          <div key={car.id} className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                            <Link to={`/car/${car.id}`}>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <Car className="w-4 h-4 text-primary" />
-                                  <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
-                                    {car.brand} {car.model}
-                                  </h4>
-                                </div>
-                                <Badge variant="secondary" className="text-xs">
-                                  Available
-                                </Badge>
-                              </div>
-                              <div className="text-primary font-bold text-sm">
-                                {car.price.toLocaleString()} {car.currency}/day
-                              </div>
-                              <div className="text-xs text-muted-foreground mt-1">
-                                Starting from
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div> */}
               </>
             )}
 
@@ -326,7 +335,7 @@ const Cars = () => {
               <div className="mb-8">
                 <Card className="bg-card border-border">
                   <CardHeader>
-                    <CardTitle className="text-xl text-white">Popular Cars for Sale</CardTitle>
+                    <CardTitle className="text-xl text-foreground">Popular Cars for Sale</CardTitle>
                     <p className="text-muted-foreground">Quick overview of our most popular vehicles for sale</p>
                   </CardHeader>
                   <CardContent>
@@ -336,8 +345,8 @@ const Cars = () => {
                           <Link to={`/car/${car.id}`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <Car className="w-4 h-4 text-primary" />
-                                <h4 className="font-semibold text-white text-sm group-hover:text-primary transition-colors">
+                                <Car className="w-4 h-4 text-secondary" />
+                                <h4 className="font-semibold text-white text-sm group-hover:text-foreground transition-colors">
                                   {car.brand} {car.model}
                                 </h4>
                               </div>
@@ -362,7 +371,7 @@ const Cars = () => {
 
             {loading ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">Loading cars...</p>
+                <p className="text-muted-foreground text-lg">{t('loadingCars')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -372,7 +381,7 @@ const Cars = () => {
                       <div className="aspect-video overflow-hidden rounded-t-lg">
                         <img
                           src={car.image_url || "/placeholder.svg"}
-                          alt={car.title}
+                          alt={car.title || `${car.brand} ${car.model}`}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -385,7 +394,9 @@ const Cars = () => {
                         </div>
                         <p className="text-muted-foreground mb-1">{car.year} • {car.mileage ? `${car.mileage.toLocaleString()} km` : 'N/A'}</p>
                         <p className="text-muted-foreground text-sm">{car.transmission} • {car.fuel_type}</p>
-                        <p className="text-primary font-bold mt-2">{car.price.toLocaleString()} {car.currency}</p>
+                        <p className="text-primary font-bold mt-2">
+                          {car.price ? `${car.price.toLocaleString()} ${car.currency}` : t('priceOnRequest')}
+                        </p>
                         
                         <div className="flex items-center gap-2 mt-4">
                           <Button variant="outline" size="sm" className="flex-1" asChild>
@@ -411,10 +422,10 @@ const Cars = () => {
         </div>
 
         <Dialog open={!!selectedCar} onOpenChange={() => setSelectedCar(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl bg-card border-border">
             <DialogHeader>
-              <DialogTitle className="text-2xl">
-                {selectedCar?.brand} {selectedCar?.model}
+              <DialogTitle className="text-foreground">
+                {selectedCar?.title || `${selectedCar?.brand} ${selectedCar?.model} (${selectedCar?.year})`}
               </DialogTitle>
             </DialogHeader>
             
@@ -423,34 +434,34 @@ const Cars = () => {
                 <div className="aspect-video overflow-hidden rounded-lg">
                   <img
                     src={selectedCar.image_url || "/placeholder.svg"}
-                    alt={selectedCar.title}
+                    alt={selectedCar.title || `${selectedCar.brand} ${selectedCar.model}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Year:</span>
-                    <span className="ml-2 text-white">{selectedCar.year}</span>
+                    <span className="font-medium text-foreground">{t('year')}:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.year}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Mileage:</span>
-                    <span className="ml-2 text-white">{selectedCar.mileage ? `${selectedCar.mileage.toLocaleString()} km` : 'N/A'}</span>
+                    <span className="font-medium text-foreground">{t('mileage')}:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.mileage ? `${selectedCar.mileage.toLocaleString()} km` : 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Transmission:</span>
-                    <span className="ml-2 text-white">{selectedCar.transmission}</span>
+                    <span className="font-medium text-foreground">{t('transmission')}:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.transmission}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Fuel Type:</span>
-                    <span className="ml-2 text-white">{selectedCar.fuel_type}</span>
+                    <span className="font-medium text-foreground">{t('fuel')}:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.fuel_type}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Seats:</span>
-                    <span className="ml-2 text-white">{selectedCar.seats}</span>
+                    <span className="font-medium text-foreground">{t('seats')}:</span>
+                    <span className="ml-2 text-muted-foreground">{selectedCar.seats}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Status:</span>
+                    <span className="font-medium text-foreground">{t('status')}:</span>
                     <Badge className="ml-2" variant={selectedCar.type === "sale" ? "default" : "secondary"}>
                       {selectedCar.type === "sale" ? "For Sale" : "For Rent"}
                     </Badge>
@@ -458,26 +469,44 @@ const Cars = () => {
                 </div>
 
                 <div className="text-center py-2">
-                  <span className="text-2xl font-bold text-primary">{selectedCar.price.toLocaleString()} {selectedCar.currency}</span>
+                  <span className="text-2xl font-bold text-primary">
+                    {selectedCar.price ? `${selectedCar.price.toLocaleString()} ${selectedCar.currency}` : t('priceOnRequest')}
+                  </span>
                 </div>
+
+                {selectedCar.features && selectedCar.features.length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-foreground mb-2">{t('features')}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCar.features.map((feature, index) => (
+                        <span 
+                          key={index}
+                          className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-xs"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <p className="text-muted-foreground">{selectedCar.description}</p>
 
                 <div className="flex gap-4 pt-4">
                   <Button className="flex-1" asChild>
-                    <a href={`tel:${selectedCar.contact_phone}`} className="flex items-center justify-center gap-2">
+                    <a href={`tel:${selectedCar.contact_phone || '+250788239593'}`} className="flex items-center justify-center gap-2">
                       <Phone className="w-4 h-4" />
-                      Call Now
+                      {t('call')}
                     </a>
                   </Button>
                   <Button variant="secondary" className="flex-1" asChild>
-                    <a href={`https://wa.me/${selectedCar.contact_whatsapp}`} className="flex items-center justify-center gap-2">
+                    <a href={`https://wa.me/${selectedCar.contact_whatsapp?.replace('+', '') || '250788239593'}`} className="flex items-center justify-center gap-2">
                       <MessageCircle className="w-4 h-4" />
-                      WhatsApp
+                      {t('whatsapp')}
                     </a>
                   </Button>
                   <Button variant="outline" asChild>
-                    <Link to={`/car/${selectedCar.id}`}>Full Details</Link>
+                    <Link to={`/car/${selectedCar.id}`}>{t('fullDetails')}</Link>
                   </Button>
                 </div>
               </div>

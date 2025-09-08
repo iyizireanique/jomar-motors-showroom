@@ -7,11 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, MessageCircle, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-// 1. Import the localCars data
-import { localCars } from "@/pages/localCars";
-
-// 2. Adjust the interface to match your localCars data structure
 interface Car {
   id: string;
   title: string;
@@ -24,49 +23,101 @@ interface Car {
   fuel_type: string;
   transmission: string;
   seats: number;
-  mileage: number;
+  mileage?: number;
   location: string;
-  description: string;
-  features: string[];
-  image_url: string;
-  contact_phone: string;
-  contact_whatsapp: string;
+  description?: string;
+  features?: string[];
+  image_url?: string;
+  gallery_urls?: string[];
+  contact_email?: string;
+  contact_phone?: string;
+  contact_whatsapp?: string;
   featured: boolean;
   available: boolean;
 }
 
 const CarDetails = () => {
   const { id } = useParams();
-  // Use the imported localCars array element type for state to avoid duplicate 'Car' type conflicts
-  const [car, setCar] = useState<typeof localCars[number] | null>(null);
+  const [car, setCar] = useState<Car | null>(null);
+  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { t } = useLanguage();
+  const { toast } = useToast();
 
   useEffect(() => {
-    // 3. Find the car with the matching ID from the localCars array
-    const foundCar = localCars.find(c => c.id === id);
-
-    if (foundCar) {
-      setCar(foundCar);
-    } else {
-      // Handle case where car is not found
-      setCar(null);
+    if (id) {
+      fetchCarDetails(id);
     }
   }, [id]);
 
-  // Gallery functionality is now dependent on a `gallery_urls` property, which your localCars data
-  // does not have. For now, we will use the single `image_url`. You can expand this later.
-  // The gallery logic is disabled or simplified since there is only one image URL.
+  const fetchCarDetails = async (carId: string) => {
+    setLoading(true);
+    try {
+      console.log('Fetching car details from Supabase...', carId);
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .eq('id', carId)
+        .eq('available', true)
+        .single();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        if (error.code === 'PGRST116') {
+          // No rows returned
+          setCar(null);
+        } else {
+          throw error;
+        }
+      } else {
+        console.log('Fetched car details:', data);
+        setCar(data);
+      }
+    } catch (error) {
+      console.error('Error fetching car details:', error);
+      toast({
+        title: "Connection Error", 
+        description: "Unable to load car details. Please check your connection.",
+        variant: "destructive",
+      });
+      setCar(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Gallery functionality
   const nextImage = () => {
-    // No gallery functionality for now
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }
   };
 
   const prevImage = () => {
-    // No gallery functionality for now
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    }
   };
   
-  // Create an array of images to handle the gallery.
-  // For now, it will just contain the main image URL.
-  const images = car ? [car.image_url] : [];
+  // Create an array of images to handle the gallery
+  const images = car ? [
+    car.image_url,
+    ...(car.gallery_urls || [])
+  ].filter(Boolean) as string[] : [];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <p className="text-muted-foreground text-lg">{t('loadingCars')}</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!car) {
     return (
@@ -74,10 +125,13 @@ const CarDetails = () => {
         <Header />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl text-white">Car not found</h1>
-            <Link to="/cars" className="text-primary hover:underline">
-              Back to Cars
-            </Link>
+            <h1 className="text-2xl text-white mb-4">Car not found</h1>
+            <p className="text-muted-foreground mb-4">The car you're looking for doesn't exist or is no longer available.</p>
+            <Button asChild>
+              <Link to="/cars">
+                Back to Cars
+              </Link>
+            </Button>
           </div>
         </div>
         <Footer />
@@ -103,13 +157,12 @@ const CarDetails = () => {
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-video overflow-hidden rounded-lg">
-              {/* Use the car's image_url directly */}
               <img
-                src={car.image_url}
-                alt={`${car.brand} ${car.model}`}
+                src={images[currentImageIndex] || "/placeholder.svg"}
+                alt={car.title || `${car.brand} ${car.model}`}
                 className="w-full h-full object-cover"
               />
-              {/* Gallery navigation is now hidden as there's only one image */}
+              {/* Gallery navigation */}
               {images.length > 1 && (
                 <>
                   <button
@@ -125,6 +178,11 @@ const CarDetails = () => {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </>
+              )}
+              {images.length > 1 && (
+                <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
               )}
             </div>
             
@@ -154,42 +212,53 @@ const CarDetails = () => {
           <div className="space-y-6">
             <div>
               <div className="flex justify-between items-start mb-2">
-                <h1 className="text-3xl font-bold text-white">{car.brand} {car.model}</h1>
+                <h1 className="text-3xl font-bold text-white">
+                  {car.title || `${car.brand} ${car.model}`}
+                </h1>
                 <Badge variant={car.type === "sale" ? "default" : "secondary"}>
-                  {car.type === "sale" ? "For Sale" : "For Rent"}
+                  {car.type === "sale" ? t('forSaleLabel') : t('forRentLabel')}
                 </Badge>
               </div>
               {car.price && (
                 <p className="text-3xl font-bold text-primary mb-4">
                   {car.price.toLocaleString()} {car.currency}
+                  {car.type === "rent" && (
+                    <span className="text-base text-muted-foreground ml-2">/day</span>
+                  )}
                 </p>
               )}
-              <p className="text-muted-foreground">{car.description}</p>
+              <p className="text-muted-foreground">{car.description || "No description available."}</p>
             </div>
 
             {/* Specifications */}
             <Card className="bg-card border-border">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Specifications</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">{t('specifications') || 'Specifications'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-muted-foreground">Year:</span>
+                    <span className="text-muted-foreground">{t('year') || 'Year'}:</span>
                     <span className="ml-2 text-white">{car.year}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Mileage:</span>
-                    <span className="ml-2 text-white">{car.mileage.toLocaleString()} km</span>
+                    <span className="text-muted-foreground">{t('mileage') || 'Mileage'}:</span>
+                    <span className="ml-2 text-white">
+                      {car.mileage ? `${car.mileage.toLocaleString()} km` : 'N/A'}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Transmission:</span>
+                    <span className="text-muted-foreground">{t('transmission') || 'Transmission'}:</span>
                     <span className="ml-2 text-white">{car.transmission}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Fuel Type:</span>
+                    <span className="text-muted-foreground">{t('fuel') || 'Fuel Type'}:</span>
                     <span className="ml-2 text-white">{car.fuel_type}</span>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Location:</span>
+                    <span className="text-muted-foreground">{t('seats') || 'Seats'}:</span>
+                    <span className="ml-2 text-white">{car.seats}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">{t('location') || 'Location'}:</span>
                     <span className="ml-2 text-white">{car.location}</span>
                   </div>
                 </div>
@@ -197,39 +266,98 @@ const CarDetails = () => {
             </Card>
 
             {/* Features */}
-            <Card className="bg-card border-border">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Features</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {car.features.map((feature, index) => (
-                    <div key={index} className="flex items-center text-sm text-gray-300">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></div>
-                      {feature}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {car.features && car.features.length > 0 && (
+              <Card className="bg-card border-border">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">{t('features') || 'Features'}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {car.features.map((feature, index) => (
+                      <div key={index} className="flex items-center text-sm text-gray-300">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></div>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Contact Actions */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-white">Interested? Get in Touch</h3>
+              <h3 className="text-xl font-semibold text-white">
+                {t('interestedContact') || 'Interested? Get in Touch'}
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Button size="lg" asChild>
-                  <a href={`tel:${car.contact_phone}`} className="flex items-center justify-center gap-2">
+                  <a 
+                    href={`tel:${car.contact_phone || '+250788239593'}`} 
+                    className="flex items-center justify-center gap-2"
+                  >
                     <Phone className="w-5 h-5" />
-                    Call Now
+                    {t('call') || 'Call Now'}
                   </a>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>
-                  <a href={`https://wa.me/${car.contact_whatsapp}`} className="flex items-center justify-center gap-2" target="_blank" rel="noopener noreferrer">
+                  <a 
+                    href={`https://wa.me/${(car.contact_whatsapp || '+250788239593').replace('+', '')}`} 
+                    className="flex items-center justify-center gap-2" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
                     <MessageCircle className="w-5 h-5" />
-                    WhatsApp
+                    {t('whatsapp') || 'WhatsApp'}
                   </a>
                 </Button>
               </div>
+              <div className="text-sm text-muted-foreground">
+                <p>Available 24/7 for inquiries and bookings</p>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Additional Information */}
+        <div className="mt-12">
+          <Card className="bg-card border-border">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">
+                {t('additionalInfo') || 'Additional Information'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-muted-foreground">
+                <div>
+                  <h4 className="font-medium text-white mb-2">
+                    {car.type === 'rent' ? 'Rental Terms' : 'Purchase Terms'}
+                  </h4>
+                  <ul className="space-y-1">
+                    <li>• Valid driving license required</li>
+                    {car.type === 'rent' && (
+                      <>
+                        <li>• Minimum rental period applies</li>
+                        <li>• Fuel policy: Return with same level</li>
+                        <li>• Insurance included</li>
+                      </>
+                    )}
+                    {car.type === 'sale' && (
+                      <>
+                        <li>• Inspection welcome</li>
+                        <li>• Documentation provided</li>
+                        <li>• Transfer assistance available</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium text-white mb-2">Contact Information</h4>
+                  <ul className="space-y-1">
+                    <li>Phone: {car.contact_phone || '+250 788 239 593'}</li>
+                    <li>WhatsApp: {car.contact_whatsapp || '+250 788 239 593'}</li>
+                    {car.contact_email && <li>Email: {car.contact_email}</li>}
+                    <li>Location: {car.location}</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
