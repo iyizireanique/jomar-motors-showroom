@@ -45,7 +45,9 @@ const CategorizedCars = () => {
   }, []);
 
   const fetchCars = async () => {
+    setLoading(true);
     try {
+      console.log('Fetching all cars from Supabase...');
       const { data, error } = await supabase
         .from('cars')
         .select('*')
@@ -53,13 +55,14 @@ const CategorizedCars = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching cars:', error);
-        setAllCars([]);
-      } else {
-        setAllCars(data || []);
+        console.error('Supabase error:', error);
+        throw error;
       }
+      
+      console.log('Fetched all cars:', data);
+      setAllCars(data || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching cars:', error);
       setAllCars([]);
     } finally {
       setLoading(false);

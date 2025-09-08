@@ -4,7 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
-import { supabase, type Car as CarType } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
@@ -37,13 +38,16 @@ const FeaturedCars = () => {
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCars();
   }, []);
 
   const fetchCars = async () => {
+    setLoading(true);
     try {
+      console.log('Fetching cars from Supabase...');
       const { data, error } = await supabase
         .from('cars')
         .select('*')
@@ -53,13 +57,19 @@ const FeaturedCars = () => {
         .limit(6);
 
       if (error) {
-        console.error('Error fetching cars:', error);
-        setCars([]);
-      } else {
-        setCars(data || []);
+        console.error('Supabase error:', error);
+        throw error;
       }
+      
+      console.log('Fetched cars:', data);
+      setCars(data || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching cars:', error);
+      toast({
+        title: "Connection Error", 
+        description: "Unable to load cars. Please check your connection.",
+        variant: "destructive",
+      });
       setCars([]);
     } finally {
       setLoading(false);
