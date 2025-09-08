@@ -114,7 +114,7 @@ const Footer = () => {
               to="/admin" 
               className="text-xs text-muted-foreground hover:text-primary transition-colors opacity-50 hover:opacity-100"
             >
-              Admin
+              Copyright
             </Link>
           </div>
         </div>
