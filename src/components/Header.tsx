@@ -66,6 +66,9 @@ const Header = () => {
                   <Link to="/cars?filter=rent">{t('forRental')}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/rental-blog">Rental Blog</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/buying-guide">{t('buyingConsultancy')}</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -148,6 +151,9 @@ const Header = () => {
                   </Link>
                   <Link to="/cars?filter=rent" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                     {t('forRental')}
+                  </Link>
+                  <Link to="/rental-blog" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    Rental Blog
                   </Link>
                   <Link to="/buying-guide" className="block py-1 text-muted-foreground hover:text-primary" onClick={() => setIsMenuOpen(false)}>
                     {t('buyingConsultancy')}

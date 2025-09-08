@@ -27,6 +27,7 @@ interface Car {
   description?: string;
   features?: string[];
   image_url?: string;
+  gallery_urls?: string[];
   contact_phone?: string;
   contact_whatsapp?: string;
   contact_email?: string;
@@ -60,6 +61,7 @@ const Admin = () => {
     description: "",
     features: "",
     image_url: "",
+    gallery_urls: [] as string[],
     contact_phone: "+250796684401",
     contact_whatsapp: "+250796684401",
     contact_email: "info@jomarmotors.com",
@@ -137,6 +139,7 @@ const Admin = () => {
         description: newCar.description,
         features: newCar.features ? newCar.features.split(",").map(f => f.trim()).filter(f => f) : [],
         image_url: newCar.image_url,
+        gallery_urls: newCar.gallery_urls,
         contact_phone: newCar.contact_phone,
         contact_whatsapp: newCar.contact_whatsapp,
         contact_email: newCar.contact_email,
@@ -179,6 +182,7 @@ const Admin = () => {
         description: "",
         features: "",
         image_url: "",
+        gallery_urls: [],
         contact_phone: "+250796684401",
         contact_whatsapp: "+250796684401",
         contact_email: "info@jomarmotors.com",
@@ -207,44 +211,63 @@ const Admin = () => {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `car-images/${fileName}`;
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+        const filePath = `car-images/${fileName}`;
 
-      const { data, error } = await supabase.storage
-        .from('car-images')
-        .upload(filePath, file);
+        const { data, error } = await supabase.storage
+          .from('car-images')
+          .upload(filePath, file);
 
-      if (error) {
-        throw error;
-      }
+        if (error) {
+          throw error;
+        }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('car-images')
-        .getPublicUrl(filePath);
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('car-images')
+          .getPublicUrl(filePath);
 
-      setNewCar({ ...newCar, image_url: publicUrl });
+        return publicUrl;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      
+      // Set first image as main image, rest as gallery
+      const mainImage = uploadedUrls[0];
+      const galleryImages = uploadedUrls.length > 1 ? uploadedUrls.slice(1) : [];
+      
+      setNewCar({ 
+        ...newCar, 
+        image_url: mainImage,
+        gallery_urls: [...(newCar.gallery_urls || []), ...galleryImages]
+      });
       
       toast({
-        title: "Image Uploaded",
-        description: "Car image has been uploaded successfully",
+        title: "Images Uploaded",
+        description: `${uploadedUrls.length} image(s) uploaded successfully`,
       });
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading images:', error);
       toast({
         title: "Upload Error",
-        description: "Failed to upload image. Please try again.",
+        description: "Failed to upload images. Please try again.",
         variant: "destructive",
       });
     } finally {
       setUploading(false);
     }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    const updatedGallery = newCar.gallery_urls.filter((_, i) => i !== index);
+    setNewCar({ ...newCar, gallery_urls: updatedGallery });
   };
 
   const handleDeleteCar = async (carId: string) => {
@@ -462,23 +485,56 @@ const Admin = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <Label htmlFor="image_upload">Car Image</Label>
-                  <div className="space-y-2">
+                <div className="md:col-span-2">
+                  <Label htmlFor="image_upload">Car Images (Multiple)</Label>
+                  <div className="space-y-4">
                     <Input
                       id="image_upload"
                       type="file"
                       accept="image/*"
+                      multiple
                       onChange={handleImageUpload}
                       className="cursor-pointer"
+                      disabled={uploading}
                     />
+                    {uploading && <p className="text-sm text-muted-foreground">Uploading images...</p>}
+                    
+                    {/* Main Image */}
                     {newCar.image_url && (
-                      <div className="mt-2">
-                        <img 
-                          src={newCar.image_url} 
-                          alt="Car preview" 
-                          className="w-32 h-24 object-cover rounded-md border"
-                        />
+                      <div>
+                        <Label className="text-sm font-medium">Main Image</Label>
+                        <div className="mt-1">
+                          <img 
+                            src={newCar.image_url} 
+                            alt="Main car image" 
+                            className="w-32 h-24 object-cover rounded-md border"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Gallery Images */}
+                    {newCar.gallery_urls && newCar.gallery_urls.length > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium">Gallery Images</Label>
+                        <div className="grid grid-cols-4 gap-2 mt-1">
+                          {newCar.gallery_urls.map((url, index) => (
+                            <div key={index} className="relative">
+                              <img 
+                                src={url} 
+                                alt={`Gallery image ${index + 1}`} 
+                                className="w-20 h-16 object-cover rounded-md border"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeGalleryImage(index)}
+                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -538,6 +594,7 @@ const Admin = () => {
                         description: "",
                         features: "",
                         image_url: "",
+                        gallery_urls: [],
                         contact_phone: "+250796684401",
                         contact_whatsapp: "+250796684401",
                         contact_email: "info@jomarmotors.com",
@@ -599,6 +656,7 @@ const Admin = () => {
                         description: car.description || "",
                         features: car.features?.join(", ") || "",
                         image_url: car.image_url || "",
+                        gallery_urls: car.gallery_urls || [],
                         contact_phone: car.contact_phone || "+250796684401",
                         contact_whatsapp: car.contact_whatsapp || "+250796684401",
                         contact_email: car.contact_email || "info@jomarmotors.com",

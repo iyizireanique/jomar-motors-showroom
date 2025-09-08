@@ -3,7 +3,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 export type Language = 'en' | 'rw' | 'fr';
 
 interface Translation {
-  [key: string]: string;
+  [key: string]: string | {
+    [key: string]: string;
+  };
 }
 
 const translations: Record<Language, Translation> = {
@@ -80,7 +82,22 @@ const translations: Record<Language, Translation> = {
     flexibilityDesc: 'Travel anywhere, anytime without depending on public transport. Our long-term packages start from a few weeks to yearly agreements.',
     vehicleVariety: 'Vehicle Variety',
     vehicleVarietyDesc: 'Choose from a wide range of vehicles, from rugged 4x4s to comfortable luxury sedans.',
-    vehicleOptions: 'Vehicle Options'
+    vehicleOptions: 'Vehicle Options',
+
+    // Rental Blog
+    rentalBlog: {
+      title: "Car Rental Services",
+      subtitle: "Explore our premium fleet of rental vehicles. Perfect for business trips, family vacations, or daily commutes.",
+      noCars: "No rental cars available at the moment.",
+      photos: "Photos",
+      noImage: "No image available",
+      rental: "For Rent",
+      seats: "Seats",
+      transmission: "Transmission", 
+      fuel: "Fuel Type",
+      call: "Call Now",
+      details: "View Details"
+    }
   },
   rw: {
     // Header
@@ -155,7 +172,22 @@ const translations: Record<Language, Translation> = {
     flexibilityDesc: 'Genda ahantu hose, igihe cyose utisabwa ubwikorezi rusange. Paki zacu z\'igihe kirekire zitangira mu cyumweru kimwe kugeza ku mwaka.',
     vehicleVariety: 'Ubwoko bw\'imodoka',
     vehicleVarietyDesc: 'Hitamo mu bwoko bwinshi bw\'imodoka, uhereye kuri 4x4 zikomeye kugeza kuri sedan z\'ubunyangamugayo.',
-    vehicleOptions: 'Amahitamo y\'imodoka'
+    vehicleOptions: 'Amahitamo y\'imodoka',
+
+    // Rental Blog
+    rentalBlog: {
+      title: "Serivisi z'Ubukode bw'Ibinyabiziga",
+      subtitle: "Reba ubwato bwacu bwiza bw'ibinyabiziga byo gukodesha. Byiza mu rugendo rw'ubucuruzi, amahoro y'umuryango, cyangwa ingendo za buri munsi.",
+      noCars: "Nta binyabiziga byo gukodesha bihari uyu munsi.",
+      photos: "Amafoto",
+      noImage: "Nta shusho ihari",
+      rental: "Byo Gukodesha",
+      seats: "Intebe",
+      transmission: "Ubwishingizi",
+      fuel: "Ubwoko bwa Lisansi",
+      call: "Hamagara None",
+      details: "Reba Amakuru"
+    }
   },
   fr: {
     // Header
@@ -230,14 +262,29 @@ const translations: Record<Language, Translation> = {
     flexibilityDesc: 'Voyagez n\'importe où, n\'importe quand sans dépendre des transports publics. Nos forfaits à long terme commencent de quelques semaines à des contrats annuels.',
     vehicleVariety: 'Variété de véhicules',
     vehicleVarietyDesc: 'Choisissez parmi une large gamme de véhicules, des 4x4 robustes aux berlines de luxe confortables.',
-    vehicleOptions: 'Options de véhicules'
+    vehicleOptions: 'Options de véhicules',
+
+    // Rental Blog
+    rentalBlog: {
+      title: "Services de Location de Voitures",
+      subtitle: "Explorez notre flotte premium de véhicules de location. Parfait pour les voyages d'affaires, les vacances en famille ou les trajets quotidiens.",
+      noCars: "Aucune voiture de location disponible pour le moment.",
+      photos: "Photos",
+      noImage: "Aucune image disponible",
+      rental: "À Louer",
+      seats: "Sièges",
+      transmission: "Transmission",
+      fuel: "Type de Carburant",
+      call: "Appeler Maintenant",
+      details: "Voir Détails"
+    }
   }
 };
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string) => string | any;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -265,8 +312,25 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: string): string => {
-    return translations[language][key] || translations.en[key] || key;
+  const t = (key: string): string | any => {
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      value = value?.[k];
+      if (value === undefined) break;
+    }
+    
+    if (value === undefined) {
+      // Fallback to English
+      value = translations.en;
+      for (const k of keys) {
+        value = value?.[k];
+        if (value === undefined) break;
+      }
+    }
+    
+    return value || key;
   };
 
   return (

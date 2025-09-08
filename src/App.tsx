@@ -9,7 +9,7 @@ import CarDetails from "./pages/CarDetails";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
-import BuyingGuide from "./pages/BuyingGuide";
+import RentalBlog from "./pages/RentalBlog";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +24,7 @@ const App = () => (
           <Route path="/cars" element={<Cars />} />
           <Route path="/car/:id" element={<CarDetails />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/buying-guide" element={<BuyingGuide />} />
+          <Route path="/rental-blog" element={<RentalBlog />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
