@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Menu, X, Phone, MessageCircle, ChevronDown, Info, Globe } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import rwandaFlag from "@/assets/rwanda-flag.png";
 import { AboutModal } from "@/components/AboutModal";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 
@@ -34,8 +35,15 @@ const Header = () => {
               className="w-12 h-12 object-contain"
             />
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-primary">JOMAR MOTORS RWANDA</h1>
-              <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA  RYIZEWE</p>
+              <div className="flex items-center space-x-2">
+                <h1 className="text-xl font-bold text-primary">{t('heroTitle')}</h1>
+                <img 
+                  src={rwandaFlag}
+                  alt="Rwanda Flag"
+                  className="w-6 h-6 rounded-sm border border-border/20"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">{t('trustedPartner')}</p>
             </div>
           </Link>
 

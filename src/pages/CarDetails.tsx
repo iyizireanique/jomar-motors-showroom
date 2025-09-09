@@ -71,7 +71,10 @@ const CarDetails = () => {
         }
       } else {
         console.log('Fetched car details:', data);
-        setCar(data);
+        setCar({
+          ...data,
+          type: data.type as "sale" | "rent"
+        });
       }
     } catch (error) {
       console.error('Error fetching car details:', error);

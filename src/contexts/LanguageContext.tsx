@@ -22,15 +22,15 @@ const translations: Record<Language, Translation> = {
     call: 'Call',
     whatsapp: 'WhatsApp',
     
-    // Hero Section
+    // Site branding translations
     heroTitle: 'JOMAR MOTORS RWANDA',
+    trustedPartner: 'ISOKO RY\'IMODOKA RYIZEWE',
     heroSubtitle: 'Buy, Sell, Rent Cars',
     heroDescription: 'Your premier automotive destination in Rwanda. From premium used cars to professional buying consultancy, we provide comprehensive automotive solutions with trusted expertise and quality guarantee.',
     viewCars: 'View Cars',
     rentCar: 'Rent a Car',
     learnMore: 'Learn More About Used Car Buying',
     since2019: 'Since 2019',
-    trustedPartner: 'Trusted Partner',
     qualityGuaranteed: 'Quality Guaranteed',
     
     // Featured Cars Section
@@ -112,15 +112,15 @@ const translations: Record<Language, Translation> = {
     call: 'Duhamagare',
     whatsapp: 'WhatsApp',
     
-    // Hero Section
+    // Site branding translations  
     heroTitle: 'JOMAR MOTORS RWANDA',
+    trustedPartner: 'ISOKO RY\'IMODOKA RYIZEWE',
     heroSubtitle: 'Gura, Gurisha, Kodesha Imodoka',
     heroDescription: 'Ikigo cyacu gikomeye cy\'imodoka mu Rwanda. Kuva mu modoka za kimwe zizwi neza kugeza mu nama z\'ubushoferi, dutanga ibisubizo byose by\'imodoka hamwe n\'ubumenyi bwizerwemo n\'ubwizere.',
     viewCars: 'Reba Imodoka',
     rentCar: 'Kodesha Imodoka',
     learnMore: 'Menya Byinshi ku Kugura Imodoka Zakoreshejwe',
     since2019: 'Kuva 2019',
-    trustedPartner: 'Umunyangavu Wizewe',
     qualityGuaranteed: 'Ubunyangamugayo Bwemejwe',
     
     // Featured Cars Section
@@ -202,15 +202,15 @@ const translations: Record<Language, Translation> = {
     call: 'Appeler',
     whatsapp: 'WhatsApp',
     
-    // Hero Section
-    heroTitle: 'JOMAR MOTORS RWANDA',
+    // Site branding translations
+    heroTitle: 'JOMAR MOTORS RWANDA', 
+    trustedPartner: 'Partenaire de Confiance',
     heroSubtitle: 'Acheter, Vendre, Louer des Voitures',
     heroDescription: 'Votre destination automobile de premier plan au Rwanda. Des voitures d\'occasion premium au conseil d\'achat professionnel, nous fournissons des solutions automobiles complètes avec une expertise de confiance et une garantie de qualité.',
     viewCars: 'Voir les Voitures',
     rentCar: 'Louer une Voiture',
     learnMore: 'En Savoir Plus sur l\'Achat de Voitures d\'Occasion',
     since2019: 'Depuis 2019',
-    trustedPartner: 'Partenaire de Confiance',
     qualityGuaranteed: 'Qualité Garantie',
     
     // Featured Cars Section

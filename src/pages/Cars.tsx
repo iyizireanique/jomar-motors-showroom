@@ -93,7 +93,10 @@ const Cars = () => {
       }
       
       console.log('Fetched cars:', data);
-      setCars(data || []);
+      setCars((data || []).map(car => ({
+        ...car,
+        type: car.type as "sale" | "rent"
+      })));
     } catch (error) {
       console.error('Error fetching cars:', error);
       toast({

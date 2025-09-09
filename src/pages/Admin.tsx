@@ -121,6 +121,18 @@ const Admin = () => {
 
   const handleAddCar = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate minimum image requirement
+    const totalImages = newCar.gallery_urls.length + (newCar.image_url ? 1 : 0);
+    if (totalImages < 3) {
+      toast({
+        title: "Image Requirement",
+        description: "Please upload at least 3 images for the car listing.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -486,28 +498,65 @@ const Admin = () => {
                   </Select>
                 </div>
                 <div className="md:col-span-2">
-                  <Label htmlFor="image_upload">Car Images (Multiple)</Label>
+                  <Label htmlFor="image_upload" className="text-base font-semibold">
+                    Car Images - <span className="text-primary">At least 3 images required</span>
+                  </Label>
                   <div className="space-y-4">
-                    <Input
-                      id="image_upload"
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                      className="cursor-pointer"
-                      disabled={uploading}
-                    />
-                    {uploading && <p className="text-sm text-muted-foreground">Uploading images...</p>}
+                    <div className="border-2 border-dashed border-border rounded-lg p-6">
+                      <div className="text-center">
+                        <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <div className="mt-4">
+                          <Label htmlFor="image_upload" className="cursor-pointer">
+                            <span className="mt-2 block text-sm font-medium text-primary">
+                              Click to upload multiple images
+                            </span>
+                            <span className="mt-1 block text-xs text-muted-foreground">
+                              PNG, JPG, JPEG up to 10MB each (minimum 3 images)
+                            </span>
+                          </Label>
+                          <Input
+                            id="image_upload"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageUpload}
+                            className="sr-only"
+                            disabled={uploading}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {uploading && (
+                      <div className="text-center">
+                        <div className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2"></div>
+                          <span className="text-sm text-primary">Uploading images...</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Image Counter and Status */}
+                    <div className="text-center">
+                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
+                        (newCar.gallery_urls.length + (newCar.image_url ? 1 : 0)) >= 3 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                      }`}>
+                        Images: {newCar.gallery_urls.length + (newCar.image_url ? 1 : 0)}/3+ 
+                        {(newCar.gallery_urls.length + (newCar.image_url ? 1 : 0)) >= 3 ? ' ✓' : ' (Need more)'}
+                      </div>
+                    </div>
                     
                     {/* Main Image */}
                     {newCar.image_url && (
-                      <div>
-                        <Label className="text-sm font-medium">Main Image</Label>
-                        <div className="mt-1">
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <Label className="text-sm font-medium text-primary">Main Image (Featured)</Label>
+                        <div className="mt-2">
                           <img 
                             src={newCar.image_url} 
                             alt="Main car image" 
-                            className="w-32 h-24 object-cover rounded-md border"
+                            className="w-40 h-28 object-cover rounded-md border shadow-sm"
                           />
                         </div>
                       </div>
@@ -515,20 +564,20 @@ const Admin = () => {
                     
                     {/* Gallery Images */}
                     {newCar.gallery_urls && newCar.gallery_urls.length > 0 && (
-                      <div>
-                        <Label className="text-sm font-medium">Gallery Images</Label>
-                        <div className="grid grid-cols-4 gap-2 mt-1">
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <Label className="text-sm font-medium text-primary">Gallery Images</Label>
+                        <div className="grid grid-cols-3 gap-3 mt-2">
                           {newCar.gallery_urls.map((url, index) => (
-                            <div key={index} className="relative">
+                            <div key={index} className="relative group">
                               <img 
                                 src={url} 
                                 alt={`Gallery image ${index + 1}`} 
-                                className="w-20 h-16 object-cover rounded-md border"
+                                className="w-full h-24 object-cover rounded-md border shadow-sm"
                               />
                               <button
                                 type="button"
                                 onClick={() => removeGalleryImage(index)}
-                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
                               >
                                 ×
                               </button>
@@ -570,7 +619,11 @@ const Admin = () => {
                   />
                 </div>
                 <div className="md:col-span-2 flex gap-4">
-                  <Button type="submit" disabled={loading || uploading}>
+                  <Button 
+                    type="submit" 
+                    disabled={loading || uploading || (newCar.gallery_urls.length + (newCar.image_url ? 1 : 0)) < 3}
+                    className="min-w-[120px]"
+                  >
                     {uploading ? "Uploading..." : loading ? "Saving..." : isAddingCar ? "Add Car" : "Update Car"}
                   </Button>
                   <Button 
