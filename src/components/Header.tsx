@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Menu, X, Phone, MessageCircle, ChevronDown, Info, Globe } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import rwandaFlag from "@/assets/rwanda-flag.png";
+import rwandaFlag from "@/assets/rwandalog-Photoroom.png";
 import { AboutModal } from "@/components/AboutModal";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 

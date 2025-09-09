@@ -13,12 +13,12 @@ const Footer = () => {
                 <span className="text-black font-bold">JM</span>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-primary">JOMAR MOTORS RWANDA</h3>
+                <h3 className="text-lg font-bold text-primary">JOMAR MOTORS RWANDA🇷🇼</h3>
                 <p className="text-xs text-muted-foreground">ISOKO RY'IMODOKA  RYIZEWE</p>
               </div>
             </div>
             <p className="text-gray-400 text-sm">
-              Your trusted automotive partner in Rwanda since 2019. We specialize in quality cars, 
+              Your trusted automotive partner in Rwanda🇷🇼 since 2019. We specialize in quality cars, 
               rentals, and comprehensive automotive solutions.
             </p>
             <p className="text-xs text-muted-foreground">
@@ -85,7 +85,7 @@ const Footer = () => {
               </a>
               <div className="flex items-center gap-3 text-gray-400">
                 <MapPin className="w-4 h-4" />
-                <span className="text-sm">Kigali, Rwanda</span>
+                <span className="text-sm">Kigali, Rwanda🇷🇼</span>
               </div>
             </div>
 
@@ -107,7 +107,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2025 JOMAR MOTORS RWANDA. All rights reserved. | Established 2019 | Part of JOMAR BUSINESS GROUP
+            © 2025 JOMAR MOTORS RWANDA 🇷🇼. All rights reserved. | Established 2019 | Part of JOMAR BUSINESS GROUP
           </p>
           <div className="mt-2">
             <Link 

@@ -61,7 +61,7 @@ const RENTAL_PRICE_RANGES = [
 const Cars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
-  const [filter, setFilter] = useState<"sale" | "rent">("rent"); // Default to 'rent' as requested
+  const [filter, setFilter] = useState<"sale" | "rent">("sale"); // Default to 'rent' as requested
   const [loading, setLoading] = useState(true);
   const [salePriceRanges, setSalePriceRanges] = useState<PriceRange[]>([]);
   const { t } = useLanguage();
