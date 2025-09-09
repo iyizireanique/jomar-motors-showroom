@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cars: {
         Row: {
           available: boolean | null
@@ -92,6 +119,66 @@ export type Database = {
           type?: string
           updated_at?: string
           year?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          badge: string | null
+          brand: string
+          category: string
+          created_at: string
+          description: string
+          features: string[] | null
+          id: string
+          images: string[] | null
+          in_stock: boolean | null
+          name: string
+          original_price: number | null
+          price: number
+          rating: number | null
+          review_count: number | null
+          specifications: Json | null
+          stock_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          badge?: string | null
+          brand: string
+          category: string
+          created_at?: string
+          description: string
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name: string
+          original_price?: number | null
+          price: number
+          rating?: number | null
+          review_count?: number | null
+          specifications?: Json | null
+          stock_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          badge?: string | null
+          brand?: string
+          category?: string
+          created_at?: string
+          description?: string
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name?: string
+          original_price?: number | null
+          price?: number
+          rating?: number | null
+          review_count?: number | null
+          specifications?: Json | null
+          stock_count?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
