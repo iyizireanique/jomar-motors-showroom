@@ -187,7 +187,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_car_contact_info: {
+        Args: { car_id: string }
+        Returns: {
+          contact_email: string
+          contact_phone: string
+          contact_whatsapp: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
