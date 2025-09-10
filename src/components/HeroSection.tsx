@@ -18,6 +18,7 @@ import aaa from "/src/assets/aaa.jpeg";
 import aaa1 from "/src/assets/aaa1.jpeg";
 import aaa2 from "/src/assets/aaa2.jpeg";
 import aaa3 from "/src/assets/aaa3.jpeg";
+
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { t } = useLanguage();
@@ -99,14 +100,14 @@ const HeroSection = () => {
               </motion.h1>
             </div>
 
-            {/* Description */}
+            {/* Description - Updated to use the new text */}
             <motion.p 
               className="text-lg text-gray-300 max-w-2xl leading-relaxed"
               initial={{ x: '-50%', opacity: 0 }}
               animate={{ x: '0%', opacity: 1 }}
               transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
             >
-              {t('heroDescription')}
+              Driving Rwanda Forward! Your one-stop solution for quality cars, honest deals, and service that puts you first.
             </motion.p>
 
             {/* CTA Buttons */}

@@ -18,9 +18,9 @@ const Header = () => {
   ];
 
   const languages: { code: Language; name: string; flag: string }[] = [
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' }
+    { code: 'en', name: 'EN', flag: '🇬🇧' },
+    { code: 'rw', name: 'RW', flag: '🇷🇼' },
+    { code: 'fr', name: 'FR', flag: '🇫🇷' }
   ];
 
   return (
@@ -106,9 +106,10 @@ const Header = () => {
             
             <ThemeToggle />
             <Button variant="ghost" size="sm" asChild>
+              {/* <span className="flex items-center gap-2">250796684401</span> */}
               <a href="tel:+250796684401" className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                {t('call')}
+                {t('call')}+250796684401
               </a>
             </Button>
             <Button variant="ghost" size="sm" asChild>
